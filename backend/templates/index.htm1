@@ -40,10 +40,18 @@
             max-width: none;
             padding: 6px 12px;
             cursor: pointer;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .delete-btn:hover {
+            background-color: #cc0000;
         }
     </style>
 </head>
 <body>
+
     <h1>CareLink Edge Dashboard</h1>
     <p>Manual MVP event logger for caregiver monitoring.</p>
 
@@ -103,5 +111,6 @@
             {% endfor %}
         </tbody>
     </table>
+
 </body>
 </html>
