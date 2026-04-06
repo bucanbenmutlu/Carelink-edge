@@ -1,4 +1,4 @@
-import sqlite3
+ import sqlite3
 from pathlib import Path
 
 DB_PATH = Path("data/carelink.db")
@@ -18,24 +18,22 @@ def init_db():
     cur.execute("""
         CREATE TABLE IF NOT EXISTS residents (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            full_name TEXT NOT NULL,
+            full_name TEXT,
             blood_group TEXT,
             date_of_birth TEXT,
             diet TEXT,
-            notes TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            notes TEXT
         )
     """)
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            resident_id INTEGER NOT NULL,
-            event_type TEXT NOT NULL,
-            status TEXT NOT NULL,
+            resident_id INTEGER,
+            event_type TEXT,
+            status TEXT,
             notes TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (resident_id) REFERENCES residents(id)
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
 
