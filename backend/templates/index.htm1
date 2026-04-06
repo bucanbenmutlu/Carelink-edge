@@ -1,3 +1,4 @@
+cat > templates/index.html <<'EOF'
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,7 +55,8 @@ button {
 
 .normal {background:#bbf7d0;}
 .warning {background:#fde68a;}
-critical {background:#fecaca;}
+.critical {background:#fecaca;}
+.emergency {background:#ddd6fe;}
 
 table {
     width:100%;
@@ -94,6 +96,13 @@ Critical Alerts: {{ stats.critical }}
 <input name="blood_group" placeholder="Blood Group"><br>
 <input name="date_of_birth" placeholder="DOB"><br>
 <input name="diet" placeholder="Diet"><br>
+
+<label>Allergies</label>
+<input type="text" name="allergies" placeholder="Penicillin, peanuts, etc.">
+
+<label>Disability</label>
+<input type="text" name="disability" placeholder="Mobility, hearing, vision, etc.">
+
 <textarea name="notes" placeholder="Notes"></textarea>
 <button>Add Resident</button>
 </form>
@@ -125,7 +134,7 @@ Critical Alerts: {{ stats.critical }}
 <option>emergency</option>
 </select>
 
-<textarea name="notes"></textarea>
+<textarea name="notes" placeholder="Notes"></textarea>
 
 <button>Log Event</button>
 
@@ -133,6 +142,41 @@ Critical Alerts: {{ stats.critical }}
 
 </div>
 
+</div>
+
+<div class="card">
+<h2>Residents</h2>
+
+<table>
+<tr>
+<th>Name</th>
+<th>Blood</th>
+<th>DOB</th>
+<th>Diet</th>
+<th>Allergies</th>
+<th>Disability</th>
+<th>Notes</th>
+<th></th>
+</tr>
+
+{% for resident in residents %}
+<tr>
+<td>{{ resident["full_name"] }}</td>
+<td>{{ resident["blood_group"] or "—" }}</td>
+<td>{{ resident["date_of_birth"] or "—" }}</td>
+<td>{{ resident["diet"] or "—" }}</td>
+<td>{{ resident["allergies"] or "—" }}</td>
+<td>{{ resident["disability"] or "—" }}</td>
+<td>{{ resident["notes"] or "—" }}</td>
+<td>
+<form method="POST" action="/delete_resident/{{ resident['id'] }}">
+<button class="delete">Delete</button>
+</form>
+</td>
+</tr>
+{% endfor %}
+
+</table>
 </div>
 
 <div class="card">
@@ -144,6 +188,8 @@ Critical Alerts: {{ stats.critical }}
 <th>Blood</th>
 <th>DOB</th>
 <th>Diet</th>
+<th>Allergies</th>
+<th>Disability</th>
 <th>Event</th>
 <th>Status</th>
 <th>Time</th>
@@ -152,20 +198,20 @@ Critical Alerts: {{ stats.critical }}
 
 {% for e in events %}
 <tr>
-<td>{{ e.resident_name }}</td>
-<td>{{ e.blood_group }}</td>
-<td>{{ e.date_of_birth }}</td>
-<td>{{ e.diet }}</td>
-<td>{{ e.event_type }}</td>
-<td><span class="badge {{ e.status }}">{{ e.status }}</span></td>
-<td>{{ e.created_at }}</td>
-
+<td>{{ e["resident_name"] }}</td>
+<td>{{ e["resident_blood_group"] or "—" }}</td>
+<td>{{ e["resident_dob"] or "—" }}</td>
+<td>{{ e["resident_diet"] or "—" }}</td>
+<td>{{ e["resident_allergies"] or "—" }}</td>
+<td>{{ e["resident_disability"] or "—" }}</td>
+<td>{{ e["event_type"] }}</td>
+<td><span class="badge {{ e['status'] }}">{{ e["status"] }}</span></td>
+<td>{{ e["created_at"] }}</td>
 <td>
-<form method="POST" action="/delete/{{ e.id }}">
+<form method="POST" action="/delete/{{ e['id'] }}">
 <button class="delete">Delete</button>
 </form>
 </td>
-
 </tr>
 {% endfor %}
 
@@ -177,3 +223,4 @@ Critical Alerts: {{ stats.critical }}
 
 </body>
 </html>
+EOF
