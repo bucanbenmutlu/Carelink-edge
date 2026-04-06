@@ -1,17 +1,15 @@
 from database import get_connection
 
 
-def add_resident(full_name, date_of_birth="", emergency_contact="", allergies="",
-                 blood_group="", height_cm="", diet="", notes=""):
+def add_resident(full_name, blood_group="", date_of_birth="", diet="", notes=""):
     conn = get_connection()
     cur = conn.cursor()
     cur.execute(
         """
-        INSERT INTO residents
-        (full_name, date_of_birth, emergency_contact, allergies, blood_group, height_cm, diet, notes)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO residents (full_name, blood_group, date_of_birth, diet, notes)
+        VALUES (?, ?, ?, ?, ?)
         """,
-        (full_name, date_of_birth, emergency_contact, allergies, blood_group, height_cm, diet, notes),
+        (full_name, blood_group, date_of_birth, diet, notes),
     )
     conn.commit()
     conn.close()
@@ -28,19 +26,6 @@ def get_all_residents():
     rows = cur.fetchall()
     conn.close()
     return rows
-
-
-def get_resident_by_id(resident_id):
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("""
-        SELECT *
-        FROM residents
-        WHERE id = ?
-    """, (resident_id,))
-    row = cur.fetchone()
-    conn.close()
-    return row
 
 
 def add_event(resident_id, event_type, status, notes=""):
@@ -63,14 +48,16 @@ def get_all_events():
     cur.execute("""
         SELECT
             events.id,
-            events.resident_id,
             residents.full_name AS resident_name,
+            residents.blood_group AS resident_blood_group,
+            residents.date_of_birth AS resident_dob,
+            residents.diet AS resident_diet,
             events.event_type,
             events.status,
-            events.notes,
+            events.notes AS event_notes,
             events.created_at
         FROM events
-        JOIN residents ON events.resident_id = residents.id
+        JOIN residents ON residents.id = events.resident_id
         ORDER BY events.created_at DESC
     """)
     rows = cur.fetchall()
@@ -86,7 +73,7 @@ def delete_event(event_id):
     conn.close()
 
 
-def get_dashboard_stats():
+def get_counts():
     conn = get_connection()
     cur = conn.cursor()
 
@@ -96,25 +83,8 @@ def get_dashboard_stats():
     cur.execute("SELECT COUNT(*) AS count FROM events")
     event_count = cur.fetchone()["count"]
 
-    cur.execute("""
-        SELECT COUNT(*) AS count
-        FROM events
-        WHERE LOWER(status) = 'critical' OR LOWER(status) = 'emergency'
-    """)
-    critical_count = cur.fetchone()["count"]
-
-    cur.execute("""
-        SELECT COUNT(*) AS count
-        FROM events
-        WHERE LOWER(status) = 'warning'
-    """)
-    warning_count = cur.fetchone()["count"]
-
     conn.close()
-
     return {
         "resident_count": resident_count,
         "event_count": event_count,
-        "critical_count": critical_count,
-        "warning_count": warning_count,
     }
