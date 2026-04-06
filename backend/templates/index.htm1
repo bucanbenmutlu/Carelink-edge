@@ -1,1 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CareLink Edge</title>
+<style>
 
+body {
+    font-family: Arial;
+    background:#f3f4f6;
+    margin:0;
+}
+
+.header {
+    background:#111827;
+    color:white;
+    padding:20px;
+}
+
+.container {
+    padding:20px;
+}
+
+.card {
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+}
+
+.grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+button {
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:10px;
+    margin-top:10px;
+    cursor:pointer;
+}
+
+.delete {
+    background:#ef4444;
+}
+
+.badge {
+    padding:5px 10px;
+    border-radius:6px;
+    font-size:12px;
+}
+
+.normal {background:#bbf7d0;}
+.warning {background:#fde68a;}
+.critical {background:#fecaca;}
+.emergency {background:#ddd6fe;}
+
+table {
+    width:100%;
+    border-collapse:collapse;
+}
+
+td, th {
+    padding:10px;
+    border-bottom:1px solid #ddd;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>CareLink Edge Dashboard</h1>
+</div>
+
+<div class="container">
+
+<div class="card">
+<h2>System Stats</h2>
+Residents: {{ stats.residents }} |
+Events: {{ stats.events }} |
+Critical Alerts: {{ stats.critical }}
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h2>Add Resident</h2>
+
+<form method="POST" action="/add_resident">
+<input name="full_name" placeholder="Full Name"><br>
+<input name="blood_group" placeholder="Blood Group"><br>
+<input name="date_of_birth" placeholder="DOB"><br>
+<input name="diet" placeholder="Diet"><br>
+
+<label>Allergies</label>
+<input type="text" name="allergies" placeholder="Penicillin, peanuts, etc.">
+
+<label>Disability</label>
+<input type="text" name="disability" placeholder="Mobility, hearing, vision, etc.">
+
+<textarea name="notes" placeholder="Notes"></textarea>
+<button>Add Resident</button>
+</form>
+
+</div>
+
+<div class="card">
+<h2>Log Event</h2>
+
+<form method="POST" action="/log_event">
+
+<select name="resident_id">
+{% for r in residents %}
+<option value="{{ r.id }}">{{ r.full_name }}</option>
+{% endfor %}
+</select>
+
+<select name="event_type">
+<option>Medication</option>
+<option>Pulse</option>
+<option>Emergency</option>
+<option>Check</option>
+</select>
+
+<select name="status">
+<option>normal</option>
+<option>warning</option>
+<option>critical</option>
+<option>emergency</option>
+</select>
+
+<textarea name="notes"></textarea>
+
+<button>Log Event</button>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="card">
+<h2>Residents</h2>
+
+<table>
+<tr>
+<th>Name</th>
+<th>Blood</th>
+<th>DOB</th>
+<th>Diet</th>
+<th>Allergies</th>
+<th>Disability</th>
+<th>Notes</th>
+<th></th>
+</tr>
+
+{% for resident in residents %}
+<tr>
+<td>{{ resident["full_name"] }}</td>
+<td>{{ resident["blood_group"] or "—" }}</td>
+<td>{{ resident["date_of_birth"] or "—" }}</td>
+<td>{{ resident["diet"] or "—" }}</td>
+<td>{{ resident["allergies"] or "—" }}</td>
+<td>{{ resident["disability"] or "—" }}</td>
+<td>{{ resident["notes"] or "—" }}</td>
+<td>
+<form method="POST" action="/delete_resident/{{ resident['id'] }}">
+<button class="delete">Delete</button>
+</form>
+</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+<div class="card">
+<h2>Recent Events</h2>
+
+<table>
+<tr>
+<th>Name</th>
+<th>Blood</th>
+<th>DOB</th>
+<th>Diet</th>
+<th>Allergies</th>
+<th>Disability</th>
+<th>Event</th>
+<th>Status</th>
+<th>Time</th>
+<th></th>
+</tr>
+
+{% for e in events %}
+<tr>
+<td>{{ e["resident_name"] }}</td>
+<td>{{ e["resident_blood_group"] or "—" }}</td>
+<td>{{ e["resident_dob"] or "—" }}</td>
+<td>{{ e["resident_diet"] or "—" }}</td>
+<td>{{ e["resident_allergies"] or "—" }}</td>
+<td>{{ e["resident_disability"] or "—" }}</td>
+<td>{{ e["event_type"] }}</td>
+<td><span class="badge {{ e['status'] }}">{{ e["status"] }}</span></td>
+<td>{{ e["created_at"] }}</td>
+
+<td>
+<form method="POST" action="/delete/{{ e['id'] }}">
+<button class="delete">Delete</button>
+</form>
+</td>
+
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+</div>
+
+</body>
+</html>
+EOF
