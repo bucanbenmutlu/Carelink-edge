@@ -35,6 +35,12 @@
             border-bottom: 1px solid #ddd;
             padding: 10px;
         }
+        .delete-btn {
+            width: auto;
+            max-width: none;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -76,6 +82,7 @@
                 <th>Status</th>
                 <th>Notes</th>
                 <th>Created At</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -87,6 +94,11 @@
                 <td>{{ event["status"] }}</td>
                 <td>{{ event["notes"] }}</td>
                 <td>{{ event["created_at"] }}</td>
+                <td>
+                    <form method="POST" action="/delete/{{ event['id'] }}">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
