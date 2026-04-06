@@ -19,11 +19,8 @@ def init_db():
         CREATE TABLE IF NOT EXISTS residents (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             full_name TEXT NOT NULL,
-            date_of_birth TEXT,
-            emergency_contact TEXT,
-            allergies TEXT,
             blood_group TEXT,
-            height_cm TEXT,
+            date_of_birth TEXT,
             diet TEXT,
             notes TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
