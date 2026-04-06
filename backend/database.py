@@ -16,13 +16,29 @@ def init_db():
     cur = conn.cursor()
 
     cur.execute("""
+        CREATE TABLE IF NOT EXISTS residents (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            full_name TEXT NOT NULL,
+            date_of_birth TEXT,
+            emergency_contact TEXT,
+            allergies TEXT,
+            blood_group TEXT,
+            height_cm TEXT,
+            diet TEXT,
+            notes TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            resident_name TEXT NOT NULL,
+            resident_id INTEGER NOT NULL,
             event_type TEXT NOT NULL,
             status TEXT NOT NULL,
             notes TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (resident_id) REFERENCES residents(id)
         )
     """)
 
