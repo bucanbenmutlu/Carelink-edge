@@ -1,1 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareLink Edge Dashboard</title>
+</head>
+<body>
 
+<h1>CareLink Edge Dashboard</h1>
+
+<form method="POST" action="/log">
+    <input type="text" name="resident_name" placeholder="Resident A" required><br>
+
+    <select name="event_type">
+        <option value="medication">Medication</option>
+        <option value="mood">Mood</option>
+        <option value="emergency_button">Emergency</option>
+    </select><br>
+
+    <select name="status">
+        <option value="normal">Normal</option>
+        <option value="warning">Warning</option>
+        <option value="critical">Critical</option>
+    </select><br>
+
+    <input type="text" name="notes" placeholder="Notes"><br>
+
+    <button type="submit">Log Event</button>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Resident</th>
+        <th>Event</th>
+        <th>Status</th>
+        <th>Notes</th>
+        <th>Time</th>
+        <th>Action</th>
+    </tr>
+
+    {% for event in events %}
+    <tr>
+        <td>{{ event["id"] }}</td>
+        <td>{{ event["resident_name"] }}</td>
+        <td>{{ event["event_type"] }}</td>
+        <td>{{ event["status"] }}</td>
+        <td>{{ event["notes"] }}</td>
+        <td>{{ event["created_at"] }}</td>
+        <td>
+            <form method="POST" action="/delete/{{ event['id'] }}">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+</body>
+</html>
