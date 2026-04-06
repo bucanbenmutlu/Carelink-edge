@@ -3,87 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CareLink Edge Dashboard</title>
+    <title>CareLink Edge</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
+            font-family: Arial, sans-serif;
             background: #f4f6f8;
-            color: #222;
+            color: #1f2937;
         }
 
-        .container {
-            max-width: 1300px;
+        .page {
+            max-width: 1350px;
             margin: 0 auto;
             padding: 24px;
         }
 
-        h1, h2 {
-            margin-top: 0;
-        }
-
-        .topbar {
+        .hero {
+            background: linear-gradient(135deg, #0f172a, #1d4ed8);
+            color: white;
+            border-radius: 18px;
+            padding: 28px;
             margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
         }
 
-        .subtitle {
-            color: #666;
-            margin-top: -8px;
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 40px;
         }
 
-        .stats {
+        .hero p {
+            margin: 0;
+            font-size: 17px;
+            color: #dbeafe;
+        }
+
+        .cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(2, minmax(220px, 1fr));
             gap: 16px;
-            margin-bottom: 24px;
+            margin: 20px 0 28px;
         }
 
-        .stat-card {
+        .card {
             background: white;
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 18px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
         }
 
-        .stat-title {
+        .card .label {
+            color: #6b7280;
             font-size: 14px;
-            color: #666;
+            margin-bottom: 8px;
         }
 
-        .stat-value {
-            font-size: 28px;
-            font-weight: bold;
-            margin-top: 8px;
+        .card .value {
+            font-size: 30px;
+            font-weight: 700;
         }
 
-        .grid {
+        .section-title {
+            margin: 10px 0 14px;
+            font-size: 24px;
+        }
+
+        .panel-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
         .panel {
             background: white;
-            border-radius: 14px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            margin-bottom: 6px;
+            font-size: 22px;
+        }
+
+        .panel-sub {
+            margin-top: 0;
+            color: #6b7280;
+            margin-bottom: 18px;
         }
 
         label {
             display: block;
-            margin-top: 12px;
-            margin-bottom: 6px;
+            margin: 12px 0 6px;
             font-weight: 600;
         }
 
         input, select, textarea, button {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #d8dde3;
-            border-radius: 8px;
             box-sizing: border-box;
-            font-size: 14px;
+            padding: 11px 12px;
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            font-size: 15px;
         }
 
         textarea {
@@ -93,266 +116,231 @@
 
         button {
             margin-top: 16px;
-            background: #1f6feb;
-            color: white;
             border: none;
-            font-weight: 600;
+            background: #2563eb;
+            color: white;
+            font-weight: 700;
             cursor: pointer;
         }
 
         button:hover {
-            opacity: 0.92;
+            opacity: 0.95;
         }
 
-        .resident-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 14px;
-            margin-bottom: 24px;
-        }
-
-        .resident-card {
+        .table-wrap {
             background: white;
-            border-radius: 14px;
-            padding: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-        }
-
-        .resident-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .resident-meta {
-            font-size: 14px;
-            color: #444;
-            line-height: 1.7;
-        }
-
-        .section-title {
-            margin: 30px 0 14px;
+            border-radius: 16px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+            overflow: hidden;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-        }
-
-        th, td {
-            padding: 14px;
-            border-bottom: 1px solid #eceff3;
-            text-align: left;
-            vertical-align: top;
         }
 
         th {
-            background: #f9fafb;
+            background: #eef2f7;
+            padding: 14px;
+            text-align: left;
             font-size: 14px;
         }
 
-        .badge {
+        td {
+            padding: 14px;
+            border-top: 1px solid #edf0f2;
+            vertical-align: top;
+        }
+
+        .status-badge {
             display: inline-block;
             padding: 6px 10px;
             border-radius: 999px;
             font-size: 12px;
-            font-weight: bold;
-            color: white;
+            font-weight: 700;
         }
 
-        .normal { background: #16a34a; }
-        .warning { background: #eab308; color: #222; }
-        .critical { background: #dc2626; }
-        .emergency { background: #7c3aed; }
+        .normal {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .critical {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .emergency {
+            background: #f3e8ff;
+            color: #6b21a8;
+        }
 
         .delete-btn {
-            background: #ef4444;
             width: auto;
-            padding: 8px 12px;
+            padding: 8px 14px;
+            background: #ef4444;
+            border-radius: 8px;
         }
 
         .delete-btn:hover {
-            opacity: 0.9;
+            background: #dc2626;
         }
 
-        .empty-box {
-            background: white;
-            border-radius: 14px;
-            padding: 18px;
-            color: #666;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        .muted {
+            color: #6b7280;
         }
 
-        @media (max-width: 900px) {
-            .grid {
+        @media (max-width: 980px) {
+            .panel-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cards {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-<div class="container">
+<div class="page">
 
-    <div class="topbar">
-        <h1>CareLink Edge Dashboard</h1>
-        <p class="subtitle">Resident profiles, care events, and alert tracking in one place.</p>
+    <div class="hero">
+        <h1>CareLink Edge</h1>
+        <p>Welcome to the care operations dashboard. Resident records and care event logging are managed from this page.</p>
     </div>
 
-    <div class="stats">
-        <div class="stat-card">
-            <div class="stat-title">Total Residents</div>
-            <div class="stat-value">{{ stats["resident_count"] }}</div>
+    <div class="cards">
+        <div class="card">
+            <div class="label">Total Residents</div>
+            <div class="value">{{ counts["resident_count"] }}</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-title">Total Events</div>
-            <div class="stat-value">{{ stats["event_count"] }}</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-title">Critical / Emergency Alerts</div>
-            <div class="stat-value">{{ stats["critical_count"] }}</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-title">Warnings</div>
-            <div class="stat-value">{{ stats["warning_count"] }}</div>
+        <div class="card">
+            <div class="label">Total Logged Events</div>
+            <div class="value">{{ counts["event_count"] }}</div>
         </div>
     </div>
 
-    <div class="grid">
+    <div class="panel-grid">
         <div class="panel">
-            <h2>Add Resident</h2>
+            <h2>Resident Profile Panel</h2>
+            <p class="panel-sub">Add a resident with core profile data.</p>
+
             <form method="POST" action="/add_resident">
                 <label>Full Name</label>
-                <input type="text" name="full_name" placeholder="Resident Name" required>
-
-                <label>Date of Birth</label>
-                <input type="date" name="date_of_birth">
-
-                <label>Emergency Contact</label>
-                <input type="text" name="emergency_contact" placeholder="Relative / guardian / phone">
-
-                <label>Allergies</label>
-                <input type="text" name="allergies" placeholder="Penicillin, peanuts, etc.">
+                <input type="text" name="full_name" placeholder="Resident full name" required>
 
                 <label>Blood Group</label>
                 <input type="text" name="blood_group" placeholder="A+, O-, AB+, etc.">
 
-                <label>Height (cm)</label>
-                <input type="text" name="height_cm" placeholder="170">
+                <label>Date of Birth</label>
+                <input type="date" name="date_of_birth">
 
                 <label>Diet</label>
                 <input type="text" name="diet" placeholder="Low salt, diabetic, soft food, etc.">
 
                 <label>Notes</label>
-                <textarea name="notes" placeholder="General care notes"></textarea>
+                <textarea name="notes" placeholder="Resident profile notes"></textarea>
 
                 <button type="submit">Add Resident</button>
             </form>
         </div>
 
         <div class="panel">
-            <h2>Log Event</h2>
+            <h2>Care Logging Panel</h2>
+            <p class="panel-sub">This is panel 1 on the welcome page. More panels can be added later.</p>
+
             <form method="POST" action="/log">
                 <label>Select Resident</label>
                 <select name="resident_id" required>
                     <option value="">Choose a resident</option>
                     {% for resident in residents %}
-                    <option value="{{ resident['id'] }}">{{ resident['full_name'] }}</option>
+                    <option value="{{ resident['id'] }}">
+                        {{ resident['full_name'] }}{% if resident['blood_group'] %} — {{ resident['blood_group'] }}{% endif %}
+                    </option>
                     {% endfor %}
                 </select>
 
                 <label>Event Type</label>
-                <select name="event_type">
+                <select name="event_type" required>
+                    <option value="">Choose event</option>
                     <option value="medication">Medication</option>
-                    <option value="mood">Mood</option>
-                    <option value="emergency_button">Emergency Button</option>
-                    <option value="pulse_alert">Pulse Alert</option>
+                    <option value="mood_check">Mood Check</option>
                     <option value="diet_note">Diet Note</option>
-                    <option value="care_note">Care Note</option>
+                    <option value="blood_pressure_check">Blood Pressure Check</option>
+                    <option value="pulse_alert">Pulse Alert</option>
+                    <option value="emergency_button">Emergency Button</option>
+                    <option value="care_note">General Care Note</option>
                 </select>
 
                 <label>Status</label>
-                <select name="status">
+                <select name="status" required>
                     <option value="normal">Normal</option>
                     <option value="warning">Warning</option>
                     <option value="critical">Critical</option>
                     <option value="emergency">Emergency</option>
                 </select>
 
-                <label>Notes</label>
-                <textarea name="notes" placeholder="Optional details"></textarea>
+                <label>Event Notes</label>
+                <textarea name="notes" placeholder="Add notes for this log entry"></textarea>
 
                 <button type="submit">Log Event</button>
             </form>
         </div>
     </div>
 
-    <h2 class="section-title">Resident Profiles</h2>
-
-    {% if residents %}
-    <div class="resident-list">
-        {% for resident in residents %}
-        <div class="resident-card">
-            <div class="resident-name">{{ resident["full_name"] }}</div>
-            <div class="resident-meta">
-                <strong>DOB:</strong> {{ resident["date_of_birth"] or "—" }}<br>
-                <strong>Emergency Contact:</strong> {{ resident["emergency_contact"] or "—" }}<br>
-                <strong>Allergies:</strong> {{ resident["allergies"] or "—" }}<br>
-                <strong>Blood Group:</strong> {{ resident["blood_group"] or "—" }}<br>
-                <strong>Height:</strong> {{ resident["height_cm"] or "—" }} cm<br>
-                <strong>Diet:</strong> {{ resident["diet"] or "—" }}<br>
-                <strong>Notes:</strong> {{ resident["notes"] or "—" }}
-            </div>
-        </div>
-        {% endfor %}
+    <h2 class="section-title">Recent Logs</h2>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Resident</th>
+                    <th>Blood Type</th>
+                    <th>Date of Birth</th>
+                    <th>Diet</th>
+                    <th>Event</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                    <th>Time of Log</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in events %}
+                <tr>
+                    <td>{{ e["id"] }}</td>
+                    <td>{{ e["resident_name"] }}</td>
+                    <td>{{ e["resident_blood_group"] or "—" }}</td>
+                    <td>{{ e["resident_dob"] or "—" }}</td>
+                    <td>{{ e["resident_diet"] or "—" }}</td>
+                    <td>{{ e["event_type"] }}</td>
+                    <td>
+                        <span class="status-badge {{ e['status']|lower }}">
+                            {{ e["status"] }}
+                        </span>
+                    </td>
+                    <td>{{ e["event_notes"] or "—" }}</td>
+                    <td>{{ e["created_at"] }}</td>
+                    <td>
+                        <form method="POST" action="/delete/{{ e['id'] }}">
+                            <button type="submit" class="delete-btn">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not events %}
+                <tr>
+                    <td colspan="10" class="muted">No logs yet.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
     </div>
-    {% else %}
-    <div class="empty-box">No residents added yet.</div>
-    {% endif %}
-
-    <h2 class="section-title">Event Logs</h2>
-
-    {% if events %}
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Resident</th>
-                <th>Event</th>
-                <th>Status</th>
-                <th>Notes</th>
-                <th>Created At</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for event in events %}
-            <tr>
-                <td>{{ event["id"] }}</td>
-                <td>{{ event["resident_name"] }}</td>
-                <td>{{ event["event_type"] }}</td>
-                <td>
-                    <span class="badge {{ event['status']|lower }}">
-                        {{ event["status"] }}
-                    </span>
-                </td>
-                <td>{{ event["notes"] or "—" }}</td>
-                <td>{{ event["created_at"] }}</td>
-                <td>
-                    <form method="POST" action="/delete/{{ event['id'] }}">
-                        <button type="submit" class="delete-btn">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <div class="empty-box">No events logged yet.</div>
-    {% endif %}
 
 </div>
 </body>
