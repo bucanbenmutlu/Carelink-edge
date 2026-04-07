@@ -19,23 +19,55 @@ def init_db():
         CREATE TABLE IF NOT EXISTS residents (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             full_name TEXT NOT NULL,
-            blood_group TEXT,
             date_of_birth TEXT,
-            diet TEXT,
+            id_number TEXT,
+            nationality TEXT,
+            blood_group TEXT,
             allergies TEXT,
+            diet TEXT,
             disability TEXT,
+            emergency_contact_name TEXT,
+            emergency_contact_phone TEXT,
+            emergency_contact_relationship TEXT,
+            primary_physician_name TEXT,
+            primary_physician_phone TEXT,
+            primary_physician_address TEXT,
+            medical_history TEXT,
+            current_medications TEXT,
+            vaccinations TEXT,
+            infectious_diseases TEXT,
+            adl_needs TEXT,
+            religious_cultural_preferences TEXT,
+            photo_path TEXT,
             notes TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
 
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS events (
+        CREATE TABLE IF NOT EXISTS incident_reports (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             resident_id INTEGER NOT NULL,
+            event_datetime TEXT,
             event_type TEXT NOT NULL,
-            status TEXT NOT NULL,
-            notes TEXT,
+            severity TEXT,
+            case_status TEXT,
+            description TEXT,
+            pulse TEXT,
+            blood_pressure TEXT,
+            temperature TEXT,
+            oxygen_saturation TEXT,
+            respiration_rate TEXT,
+            medication_name TEXT,
+            medication_dosage TEXT,
+            medication_time TEXT,
+            medication_correctness TEXT,
+            witnesses TEXT,
+            location TEXT,
+            immediate_actions_taken TEXT,
+            notifications TEXT,
+            follow_up_outcome TEXT,
+            staff_involved_signature TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (resident_id) REFERENCES residents(id)
         )
@@ -43,3 +75,4 @@ def init_db():
 
     conn.commit()
     conn.close()
+EOF
