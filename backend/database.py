@@ -3,13 +3,11 @@ from pathlib import Path
 
 DB_PATH = Path("data/carelink.db")
 
-
 def get_connection():
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
-
 
 def init_db():
     conn = get_connection()
@@ -26,6 +24,8 @@ def init_db():
             allergies TEXT,
             diet TEXT,
             disability TEXT,
+            height_cm TEXT,
+            weight_kg TEXT,
             emergency_contact_name TEXT,
             emergency_contact_phone TEXT,
             emergency_contact_relationship TEXT,
