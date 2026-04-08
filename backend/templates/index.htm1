@@ -159,6 +159,16 @@ td, th {
                 </div>
 
                 <div class="form-group">
+                    <label>Height (cm)</label>
+                    <input name="height_cm" placeholder="Height in cm">
+                </div>
+
+                <div class="form-group">
+                    <label>Weight (kg)</label>
+                    <input name="weight_kg" placeholder="Weight in kg">
+                </div>
+
+                <div class="form-group">
                     <label>Emergency Contact Name</label>
                     <input name="emergency_contact_name" placeholder="Emergency Contact Name" required>
                 </div>
@@ -387,6 +397,8 @@ td, th {
                 <th>Allergies</th>
                 <th>Diet</th>
                 <th>Disability</th>
+                <th>Height (cm)</th>
+                <th>Weight (kg)</th>
                 <th>Emergency Contact</th>
                 <th>Notes</th>
                 <th></th>
@@ -402,6 +414,8 @@ td, th {
                 <td>{{ resident["allergies"] or "—" }}</td>
                 <td>{{ resident["diet"] or "—" }}</td>
                 <td>{{ resident["disability"] or "—" }}</td>
+                <td>{{ resident["height_cm"] or "—" }}</td>
+                <td>{{ resident["weight_kg"] or "—" }}</td>
                 <td>
                     {{ resident["emergency_contact_name"] or "—" }}<br>
                     {{ resident["emergency_contact_phone"] or "" }}<br>
@@ -418,7 +432,7 @@ td, th {
 
             {% if not residents %}
             <tr>
-                <td colspan="11" class="empty-row">No residents yet.</td>
+                <td colspan="13" class="empty-row">No residents yet.</td>
             </tr>
             {% endif %}
         </table>
@@ -431,6 +445,8 @@ td, th {
                 <th>Resident</th>
                 <th>ID Number</th>
                 <th>Blood Group</th>
+                <th>Height (cm)</th>
+                <th>Weight (kg)</th>
                 <th>Date & Time</th>
                 <th>Event Type</th>
                 <th>Severity</th>
@@ -448,6 +464,8 @@ td, th {
                 <td>{{ report["resident_name"] }}</td>
                 <td>{{ report["resident_id_number"] or "—" }}</td>
                 <td>{{ report["resident_blood_group"] or "—" }}</td>
+                <td>{{ report["resident_height_cm"] or "—" }}</td>
+                <td>{{ report["resident_weight_kg"] or "—" }}</td>
                 <td>{{ report["event_datetime"] or report["created_at"] }}</td>
                 <td>{{ report["event_type"] }}</td>
                 <td>{{ report["severity"] or "—" }}</td>
@@ -478,7 +496,7 @@ td, th {
 
             {% if not reports %}
             <tr>
-                <td colspan="13" class="empty-row">No incident reports yet.</td>
+                <td colspan="15" class="empty-row">No incident reports yet.</td>
             </tr>
             {% endif %}
         </table>
