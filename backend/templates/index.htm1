@@ -9,44 +9,34 @@ body {
     margin: 0;
     color: #111827;
 }
-
 .header {
     background: #111827;
     color: white;
     padding: 22px;
 }
-
 .container {
     padding: 20px;
 }
-
 .card {
     background: white;
     padding: 22px;
     margin-bottom: 22px;
     border-radius: 14px;
 }
-
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 22px;
 }
-
 .form-group {
     margin-bottom: 14px;
 }
-
 label {
     display: block;
     margin-bottom: 6px;
     font-weight: 700;
 }
-
-input,
-select,
-textarea,
-button {
+input, select, textarea, button {
     width: 100%;
     box-sizing: border-box;
     padding: 11px 12px;
@@ -54,12 +44,10 @@ button {
     border-radius: 10px;
     font-size: 15px;
 }
-
 textarea {
     min-height: 90px;
     resize: vertical;
 }
-
 button {
     background: #2563eb;
     color: white;
@@ -68,57 +56,36 @@ button {
     cursor: pointer;
     font-weight: 700;
 }
-
 button:hover {
     opacity: 0.95;
 }
-
 .delete {
     background: #ef4444;
     width: auto;
     padding: 8px 14px;
 }
-
-.badge {
-    padding: 5px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 700;
-    display: inline-block;
-}
-
-.normal { background: #bbf7d0; }
-.warning { background: #fde68a; }
-.critical { background: #fecaca; }
-.emergency { background: #ddd6fe; }
-
 table {
     width: 100%;
     border-collapse: collapse;
 }
-
 td, th {
     padding: 12px 10px;
     border-bottom: 1px solid #ddd;
     text-align: left;
     vertical-align: top;
 }
-
 .panel-sub {
     color: #6b7280;
     margin-top: -4px;
     margin-bottom: 18px;
 }
-
 .stats-line {
     font-size: 18px;
     font-weight: 600;
 }
-
 .empty-row {
     color: #6b7280;
 }
-
 @media (max-width: 980px) {
     .grid {
         grid-template-columns: 1fr;
@@ -139,16 +106,16 @@ td, th {
         <h2>System Stats</h2>
         <div class="stats-line">
             Residents: {{ stats.residents }} |
-            Events: {{ stats.events }} |
-            Critical Alerts: {{ stats.critical }}
+            Incident Reports: {{ stats.reports }} |
+            Critical / Ongoing Cases: {{ stats.critical }}
         </div>
     </div>
 
     <div class="grid">
 
         <div class="card">
-            <h2>Add Resident</h2>
-            <p class="panel-sub">Fill in the resident profile information below.</p>
+            <h2>Resident Profile Panel</h2>
+            <p class="panel-sub">Complete resident registration profile.</p>
 
             <form method="POST" action="/add_resident">
                 <div class="form-group">
@@ -157,33 +124,108 @@ td, th {
                 </div>
 
                 <div class="form-group">
-                    <label>Blood Group</label>
-                    <input name="blood_group" placeholder="Blood Group" required>
-                </div>
-
-                <div class="form-group">
                     <label>Date of Birth</label>
-                    <input name="date_of_birth" placeholder="DOB" required>
+                    <input name="date_of_birth" placeholder="Date of Birth" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Diet</label>
-                    <input name="diet" placeholder="Diet" required>
+                    <label>ID Number</label>
+                    <input name="id_number" placeholder="ID Number / Passport No" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Nationality</label>
+                    <input name="nationality" placeholder="Nationality" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Blood Group</label>
+                    <input name="blood_group" placeholder="A+, O-, AB+, etc." required>
                 </div>
 
                 <div class="form-group">
                     <label>Allergies</label>
-                    <input type="text" name="allergies" placeholder="Penicillin, peanuts, etc." required>
+                    <textarea name="allergies" placeholder="Medication, food, latex, etc." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Diet</label>
+                    <input name="diet" placeholder="Diabetic, low salt, vegetarian, etc." required>
                 </div>
 
                 <div class="form-group">
                     <label>Disability</label>
-                    <input type="text" name="disability" placeholder="Mobility, hearing, vision, etc." required>
+                    <textarea name="disability" placeholder="Physical, hearing, vision, cognitive, etc." required></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>Notes</label>
-                    <textarea name="notes" placeholder="Notes" required></textarea>
+                    <label>Emergency Contact Name</label>
+                    <input name="emergency_contact_name" placeholder="Emergency Contact Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Emergency Contact Phone</label>
+                    <input name="emergency_contact_phone" placeholder="Emergency Contact Phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Emergency Contact Relationship</label>
+                    <input name="emergency_contact_relationship" placeholder="Son, daughter, spouse, etc." required>
+                </div>
+
+                <div class="form-group">
+                    <label>Primary Physician Name</label>
+                    <input name="primary_physician_name" placeholder="Primary Physician Name">
+                </div>
+
+                <div class="form-group">
+                    <label>Primary Physician Phone</label>
+                    <input name="primary_physician_phone" placeholder="Primary Physician Phone">
+                </div>
+
+                <div class="form-group">
+                    <label>Primary Physician Address</label>
+                    <textarea name="primary_physician_address" placeholder="Primary Physician Address"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Medical History</label>
+                    <textarea name="medical_history" placeholder="Heart disease, diabetes, dementia, stroke, with dates"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Current Medications</label>
+                    <textarea name="current_medications" placeholder="Medication list, dosage, morning/evening"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Vaccinations</label>
+                    <textarea name="vaccinations" placeholder="Flu, pneumococcal, COVID, etc."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Infectious Diseases</label>
+                    <textarea name="infectious_diseases" placeholder="Hepatitis, tuberculosis, etc."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>ADL Needs</label>
+                    <textarea name="adl_needs" placeholder="Eating, bathing, toileting, mobility assistance"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Religious / Cultural Preferences</label>
+                    <textarea name="religious_cultural_preferences" placeholder="Prayer times, holiday practices, food restrictions"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Photo Path</label>
+                    <input name="photo_path" placeholder="Photo filename or path">
+                </div>
+
+                <div class="form-group">
+                    <label>Notes / Special Instructions</label>
+                    <textarea name="notes" placeholder="Do not leave alone, speaks English, etc." required></textarea>
                 </div>
 
                 <button type="submit">Add Resident</button>
@@ -191,10 +233,15 @@ td, th {
         </div>
 
         <div class="card">
-            <h2>Log Event</h2>
-            <p class="panel-sub">Create a resident-linked care event entry.</p>
+            <h2>Incident Report Form</h2>
+            <p class="panel-sub">Linked to resident records with clinical and operational details.</p>
 
-            <form method="POST" action="/log_event">
+            <form method="POST" action="/add_report">
+                <div class="form-group">
+                    <label>Date & Time of Event</label>
+                    <input name="event_datetime" placeholder="YYYY-MM-DD HH:MM" required>
+                </div>
+
                 <div class="form-group">
                     <label>Select Resident</label>
                     <select name="resident_id" required>
@@ -209,30 +256,120 @@ td, th {
                     <label>Event Type</label>
                     <select name="event_type" required>
                         <option value="">Choose event</option>
-                        <option value="Medication">Medication</option>
-                        <option value="Pulse">Pulse</option>
+                        <option value="Fall">Fall</option>
+                        <option value="Medication Error">Medication Error</option>
+                        <option value="Behavioral">Behavioral</option>
+                        <option value="Injury">Injury</option>
+                        <option value="Vital Change">Vital Change</option>
                         <option value="Emergency">Emergency</option>
-                        <option value="Check">Check</option>
+                        <option value="Check-up">Check-up</option>
+                        <option value="Infection">Infection</option>
+                        <option value="Wandering">Wandering</option>
+                        <option value="Abuse">Abuse</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Severity</label>
+                    <select name="severity" required>
+                        <option value="">Choose severity</option>
+                        <option value="Minor">Minor</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="Severe">Severe</option>
+                        <option value="Fatal">Fatal</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>Status</label>
-                    <select name="status" required>
+                    <select name="case_status" required>
                         <option value="">Choose status</option>
-                        <option value="normal">normal</option>
-                        <option value="warning">warning</option>
-                        <option value="critical">critical</option>
-                        <option value="emergency">emergency</option>
+                        <option value="Resolved">Resolved</option>
+                        <option value="Ongoing">Ongoing</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label>Event Notes</label>
-                    <textarea name="notes" placeholder="Notes" required></textarea>
+                    <label>Event Description</label>
+                    <textarea name="description" placeholder="What happened, where, how, who witnessed it" required></textarea>
                 </div>
 
-                <button type="submit">Log Event</button>
+                <div class="form-group">
+                    <label>Pulse</label>
+                    <input name="pulse" placeholder="Pulse">
+                </div>
+
+                <div class="form-group">
+                    <label>Blood Pressure</label>
+                    <input name="blood_pressure" placeholder="Blood Pressure">
+                </div>
+
+                <div class="form-group">
+                    <label>Temperature</label>
+                    <input name="temperature" placeholder="Temperature">
+                </div>
+
+                <div class="form-group">
+                    <label>Oxygen Saturation (SpO₂)</label>
+                    <input name="oxygen_saturation" placeholder="SpO₂">
+                </div>
+
+                <div class="form-group">
+                    <label>Respiration Rate</label>
+                    <input name="respiration_rate" placeholder="Respiration Rate">
+                </div>
+
+                <div class="form-group">
+                    <label>Medication Name</label>
+                    <input name="medication_name" placeholder="Medication Name">
+                </div>
+
+                <div class="form-group">
+                    <label>Medication Dosage</label>
+                    <input name="medication_dosage" placeholder="Medication Dosage">
+                </div>
+
+                <div class="form-group">
+                    <label>Medication Time</label>
+                    <input name="medication_time" placeholder="Medication Time">
+                </div>
+
+                <div class="form-group">
+                    <label>Medication Correctness</label>
+                    <input name="medication_correctness" placeholder="Correct / Incorrect">
+                </div>
+
+                <div class="form-group">
+                    <label>Witnesses</label>
+                    <textarea name="witnesses" placeholder="Witness name + role"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    <input name="location" placeholder="Room, garden, dining area, etc.">
+                </div>
+
+                <div class="form-group">
+                    <label>Immediate Actions Taken</label>
+                    <textarea name="immediate_actions_taken" placeholder="First aid, doctor notified, ambulance called, etc."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Notifications</label>
+                    <textarea name="notifications" placeholder="Family, doctor, management informed + date/time"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Follow-up / Outcome</label>
+                    <textarea name="follow_up_outcome" placeholder="Recovery status, hospital transfer, family informed"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Staff Involved / Signature</label>
+                    <input name="staff_involved_signature" placeholder="Staff name / signature">
+                </div>
+
+                <button type="submit">Add Incident Report</button>
             </form>
         </div>
 
@@ -240,15 +377,17 @@ td, th {
 
     <div class="card">
         <h2>Residents</h2>
-
         <table>
             <tr>
-                <th>Name</th>
-                <th>Blood</th>
+                <th>Full Name</th>
                 <th>DOB</th>
-                <th>Diet</th>
+                <th>ID Number</th>
+                <th>Nationality</th>
+                <th>Blood Group</th>
                 <th>Allergies</th>
+                <th>Diet</th>
                 <th>Disability</th>
+                <th>Emergency Contact</th>
                 <th>Notes</th>
                 <th></th>
             </tr>
@@ -256,11 +395,18 @@ td, th {
             {% for resident in residents %}
             <tr>
                 <td>{{ resident["full_name"] }}</td>
-                <td>{{ resident["blood_group"] or "—" }}</td>
                 <td>{{ resident["date_of_birth"] or "—" }}</td>
-                <td>{{ resident["diet"] or "—" }}</td>
+                <td>{{ resident["id_number"] or "—" }}</td>
+                <td>{{ resident["nationality"] or "—" }}</td>
+                <td>{{ resident["blood_group"] or "—" }}</td>
                 <td>{{ resident["allergies"] or "—" }}</td>
+                <td>{{ resident["diet"] or "—" }}</td>
                 <td>{{ resident["disability"] or "—" }}</td>
+                <td>
+                    {{ resident["emergency_contact_name"] or "—" }}<br>
+                    {{ resident["emergency_contact_phone"] or "" }}<br>
+                    {{ resident["emergency_contact_relationship"] or "" }}
+                </td>
                 <td>{{ resident["notes"] or "—" }}</td>
                 <td>
                     <form method="POST" action="/delete_resident/{{ resident['id'] }}">
@@ -272,51 +418,67 @@ td, th {
 
             {% if not residents %}
             <tr>
-                <td colspan="8" class="empty-row">No residents yet.</td>
+                <td colspan="11" class="empty-row">No residents yet.</td>
             </tr>
             {% endif %}
         </table>
     </div>
 
     <div class="card">
-        <h2>Recent Events</h2>
-
+        <h2>Incident Reports</h2>
         <table>
             <tr>
-                <th>Name</th>
-                <th>Blood</th>
-                <th>DOB</th>
-                <th>Diet</th>
-                <th>Allergies</th>
-                <th>Disability</th>
-                <th>Event</th>
+                <th>Resident</th>
+                <th>ID Number</th>
+                <th>Blood Group</th>
+                <th>Date & Time</th>
+                <th>Event Type</th>
+                <th>Severity</th>
                 <th>Status</th>
-                <th>Time</th>
+                <th>Location</th>
+                <th>Vital Signs</th>
+                <th>Medication</th>
+                <th>Witnesses</th>
+                <th>Outcome</th>
                 <th></th>
             </tr>
 
-            {% for e in events %}
+            {% for report in reports %}
             <tr>
-                <td>{{ e["resident_name"] }}</td>
-                <td>{{ e["resident_blood_group"] or "—" }}</td>
-                <td>{{ e["resident_dob"] or "—" }}</td>
-                <td>{{ e["resident_diet"] or "—" }}</td>
-                <td>{{ e["resident_allergies"] or "—" }}</td>
-                <td>{{ e["resident_disability"] or "—" }}</td>
-                <td>{{ e["event_type"] }}</td>
-                <td><span class="badge {{ e['status'] }}">{{ e["status"] }}</span></td>
-                <td>{{ e["created_at"] }}</td>
+                <td>{{ report["resident_name"] }}</td>
+                <td>{{ report["resident_id_number"] or "—" }}</td>
+                <td>{{ report["resident_blood_group"] or "—" }}</td>
+                <td>{{ report["event_datetime"] or report["created_at"] }}</td>
+                <td>{{ report["event_type"] }}</td>
+                <td>{{ report["severity"] or "—" }}</td>
+                <td>{{ report["case_status"] or "—" }}</td>
+                <td>{{ report["location"] or "—" }}</td>
                 <td>
-                    <form method="POST" action="/delete/{{ e['id'] }}">
+                    Pulse: {{ report["pulse"] or "—" }}<br>
+                    BP: {{ report["blood_pressure"] or "—" }}<br>
+                    Temp: {{ report["temperature"] or "—" }}<br>
+                    SpO₂: {{ report["oxygen_saturation"] or "—" }}<br>
+                    Resp: {{ report["respiration_rate"] or "—" }}
+                </td>
+                <td>
+                    {{ report["medication_name"] or "—" }}<br>
+                    {{ report["medication_dosage"] or "" }}<br>
+                    {{ report["medication_time"] or "" }}<br>
+                    {{ report["medication_correctness"] or "" }}
+                </td>
+                <td>{{ report["witnesses"] or "—" }}</td>
+                <td>{{ report["follow_up_outcome"] or "—" }}</td>
+                <td>
+                    <form method="POST" action="/delete_report/{{ report['id'] }}">
                         <button class="delete">Delete</button>
                     </form>
                 </td>
             </tr>
             {% endfor %}
 
-            {% if not events %}
+            {% if not reports %}
             <tr>
-                <td colspan="10" class="empty-row">No events yet.</td>
+                <td colspan="13" class="empty-row">No incident reports yet.</td>
             </tr>
             {% endif %}
         </table>
