@@ -20,22 +20,6 @@ At its current stage, the repository is best understood as an early proof of con
 ---
 
 ## Project Structure
-
-```text
-Carelink-edge/
-│
-├── backend/              # Flask application and SQLite-based backend
-│   ├── app.py
-│   ├── database.py
-│   ├── models.py
-│   ├── requirements.txt
-│   ├── templates/
-│   └── data/
-│
-├── esp32_bridge/         # Planned ESP32 bridge layer
-├── fpga/                 # Planned FPGA logic and hardware-related layer
-├── docs/                 # Architecture and project notes
-└── README.md
 What This Project Does
 
 CareLink Edge is built around a simple workflow:
