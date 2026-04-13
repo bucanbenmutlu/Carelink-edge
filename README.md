@@ -99,3 +99,47 @@ Command + Space → type "Terminal" → Enter
 
 ```bash
 python3 --version
+```
+If you see python version in output continue;
+
+3. Clone the project
+```bash
+cd ~/Desktop
+git clone https://github.com/bucanbenmutlu/Carelink-edge.git
+cd Carelink-edge/backend
+```
+
+4. Create virtual environment
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+You should see:
+(.venv)
+
+5. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+6. Run the app
+```bash
+python3 app.py
+```
+
+7. Open in browser
+
+Go to:
+http://127.0.0.1:5000
+
+What You Can Do
+Add residents
+Create incident reports
+View records
+Test system without hardware
+
+Database
+SQLite is used.
+Auto-created here:
+backend/data/carelink.db
