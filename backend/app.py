@@ -53,6 +53,8 @@ def create_resident():
             religious_cultural_preferences=request.form.get("religious_cultural_preferences", "").strip(),
             photo_path=request.form.get("photo_path", "").strip(),
             notes=request.form.get("notes", "").strip(),
+            height_cm=request.form.get("height_cm", "").strip(),
+            weight_kg=request.form.get("weight_kg", "").strip(),
         )
     return redirect(url_for("index"))
 
