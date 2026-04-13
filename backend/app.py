@@ -93,7 +93,6 @@ def remove_resident(resident_id):
     delete_resident(resident_id)
     return redirect(url_for("index"))
 
-
 @app.route("/delete_report/<int:report_id>", methods=["POST"])
 def remove_report(report_id):
     delete_incident_report(report_id)
