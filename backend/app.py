@@ -103,4 +103,3 @@ def remove_report(report_id):
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)
-EOF
