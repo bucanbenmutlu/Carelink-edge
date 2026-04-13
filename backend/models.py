@@ -152,4 +152,3 @@ def get_counts():
     critical = cur.fetchone()[0]
     conn.close()
     return {"residents": residents, "reports": reports, "critical": critical}
-EOF
