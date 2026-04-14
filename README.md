@@ -46,33 +46,6 @@ A physical device detects events (button press, fall, health issue) → sends da
 
 ---
 
-## Hardware Vision
-
-This project is designed to support hardware integration.
-
-FPGA (planned):
-- Reads physical signals (buttons, sensors)
-- Handles alert logic (state machine)
-- Controls LED / buzzer
-- Sends data via UART
-
-ESP32 (planned):
-- Receives data from FPGA
-- Connects to Wi-Fi
-- Sends data to backend (HTTP / MQTT)
-
-Backend:
-- Stores events
-- Displays them on dashboard
-
-Flow:
-
-Device → FPGA → ESP32 → Backend → Dashboard
-
-⚠️ You do NOT need hardware to run the project right now.
-
----
-
 ## Tech Stack
 
 - Python 3
