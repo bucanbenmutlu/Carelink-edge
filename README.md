@@ -15,7 +15,6 @@ This repository is currently an early-stage MVP / proof of concept.
 - Simple dashboard interface
 - SQLite database (no setup required)
 - Flask backend (lightweight and easy to run)
-- Hardware-ready architecture (FPGA + ESP32 planned)
 
 ---
 
