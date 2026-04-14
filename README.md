@@ -52,10 +52,6 @@ A physical device detects events (button press, fall, health issue) → sends da
 - Flask
 - SQLite
 
-Planned:
-- ESP32
-- FPGA
-
 ---
 
 ## How to Run (macOS - Beginner Friendly)
