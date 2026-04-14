@@ -4,8 +4,6 @@ CareLink Edge is a prototype elderly care monitoring and incident management sys
 
 The goal of this project is to help caregivers and care facilities track residents, record incidents, and (in the future) receive real-time alerts from physical devices.
 
-This repository is currently an early-stage MVP / proof of concept.
-
 ---
 
 ## Features
