@@ -39,11 +39,7 @@ The system follows a simple flow:
 3. Store the data
 4. Display it in a dashboard
 5. Allow monitoring and follow-up
-
-Future goal:
-
-A physical device detects events (button press, fall, health issue) → sends data → backend → dashboard.
-
+   
 ---
 
 ## Tech Stack
