@@ -99,7 +99,6 @@ What You Can Do
 Add residents
 Create incident reports
 View records
-Test system without hardware
 
 Database
 SQLite is used.
