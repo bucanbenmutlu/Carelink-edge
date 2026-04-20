@@ -3,506 +3,1735 @@
 <head>
 <title>CareLink Edge</title>
 <style>
+:root {
+    --bg: #eef2f7;
+    --panel: #ffffff;
+    --panel-soft: #f8fafc;
+    --ink: #0f172a;
+    --muted: #64748b;
+    --line: #dbe4ee;
+    --nav: #0f172a;
+    --nav-soft: #1e293b;
+    --accent: #0f766e;
+    --accent-soft: #ccfbf1;
+    --blue-soft: #dbeafe;
+    --blue-ink: #1d4ed8;
+    --amber-soft: #ffedd5;
+    --amber-ink: #9a3412;
+    --red-soft: #fee2e2;
+    --red-ink: #991b1b;
+    --green-soft: #dcfce7;
+    --green-ink: #166534;
+    --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+}
+* {
+    box-sizing: border-box;
+}
 body {
-    font-family: Arial, sans-serif;
-    background: #f3f4f6;
     margin: 0;
-    color: #111827;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+    color: var(--ink);
+    overflow-x: hidden;
 }
-.header {
-    background: #111827;
-    color: white;
-    padding: 22px;
+button, input, select, textarea {
+    font: inherit;
 }
-.container {
-    padding: 20px;
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
 }
-.card {
-    background: white;
-    padding: 22px;
-    margin-bottom: 22px;
-    border-radius: 14px;
-}
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+.sidebar {
+    width: 292px;
+    background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+    color: #e2e8f0;
+    padding: 24px 18px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
     gap: 22px;
+    transition: width 220ms ease, padding 220ms ease;
 }
-.form-group {
-    margin-bottom: 14px;
+.sidebar.collapsed {
+    width: 92px;
+    padding-left: 12px;
+    padding-right: 12px;
 }
-label {
+.brand {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+.brand-badge {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    background: rgba(15, 118, 110, 0.26);
+    color: #99f6e4;
+}
+.brand h1 {
+    margin: 12px 0 6px;
+    font-size: 28px;
+    line-height: 1.05;
+    color: white;
+}
+.brand p,
+.sidebar-note,
+.section-kicker,
+.nav-meta,
+.mini-label {
+    color: #94a3b8;
+}
+.sidebar-toggle {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(30, 41, 59, 0.82);
+    color: white;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+.nav-list {
+    display: grid;
+    gap: 10px;
+}
+.nav-button {
+    width: 100%;
+    text-align: left;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #cbd5e1;
+    border-radius: 18px;
+    padding: 14px;
+    cursor: pointer;
+    transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+.nav-button:hover {
+    background: rgba(30, 41, 59, 0.88);
+    border-color: rgba(148, 163, 184, 0.18);
+    transform: translateX(2px);
+}
+.nav-button.active {
+    background: linear-gradient(135deg, rgba(15, 118, 110, 0.34), rgba(14, 165, 233, 0.14));
+    border-color: rgba(45, 212, 191, 0.28);
+    color: white;
+}
+.nav-title {
     display: block;
-    margin-bottom: 6px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.sidebar.collapsed .brand-copy,
+.sidebar.collapsed .nav-copy,
+.sidebar.collapsed .sidebar-note,
+.sidebar.collapsed .sidebar-foot {
+    display: none;
+}
+.sidebar.collapsed .nav-button {
+    padding: 12px 8px;
+    text-align: center;
+}
+.sidebar-foot {
+    margin-top: auto;
+    display: none;
+}
+.sidebar-chip {
+    padding: 14px;
+    border-radius: 18px;
+    background: rgba(30, 41, 59, 0.84);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+}
+.main {
+    flex: 1;
+    min-width: 0;
+    padding: 24px;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+}
+.topbar h2 {
+    margin: 0;
+    font-size: 34px;
+    line-height: 1.05;
+}
+.topbar p {
+    margin: 8px 0 0;
+    color: var(--muted);
+}
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.user-chip,
+.demo-chip,
+.state-pill,
+.metric-pill,
+.telemetry-chip,
+.device-state,
+.severity-pill,
+.case-pill,
+.tiny-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
     font-weight: 700;
 }
-input, select, textarea, button {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 11px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
-    font-size: 15px;
+.user-chip,
+.demo-chip {
+    padding: 9px 12px;
+    font-size: 13px;
 }
-textarea {
-    min-height: 90px;
-    resize: vertical;
+.user-chip {
+    background: white;
+    border: 1px solid var(--line);
+    color: var(--ink);
 }
-button {
-    background: #2563eb;
-    color: white;
+.demo-chip.live {
+    background: var(--green-soft);
+    color: var(--green-ink);
+}
+.demo-chip.off {
+    background: var(--amber-soft);
+    color: var(--amber-ink);
+}
+.action-button,
+.logout-button,
+.inline-button,
+.danger-button,
+.resolve-button {
     border: none;
-    margin-top: 6px;
+    border-radius: 14px;
+    padding: 11px 15px;
     cursor: pointer;
     font-weight: 700;
 }
-button:hover {
-    opacity: 0.95;
+.action-button {
+    background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+    color: white;
 }
-.delete {
+.action-button.active {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+}
+.logout-button {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+.danger-button {
     background: #ef4444;
-    width: auto;
-    padding: 8px 14px;
+    color: white;
+}
+.inline-button {
+    background: #0f172a;
+    color: white;
+}
+.resolve-button {
+    width: 100%;
+    margin-top: 12px;
+    background: linear-gradient(135deg, #166534 0%, #22c55e 100%);
+    color: white;
+}
+.workspace {
+    display: grid;
+    gap: 20px;
+    min-width: 0;
+}
+.view {
+    display: none;
+    gap: 20px;
+    min-width: 0;
+}
+.view.active {
+    display: grid;
+}
+.hero-panel,
+.card,
+.table-card {
+    background: var(--panel);
+    border: 1px solid rgba(219, 228, 238, 0.9);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+}
+.hero-panel {
+    padding: 24px;
+    background:
+        radial-gradient(circle at top right, rgba(20, 184, 166, 0.12), transparent 28%),
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 18px;
+}
+.hero-copy h3 {
+    margin: 0 0 10px;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+.hero-copy strong {
+    display: block;
+    font-size: 34px;
+    line-height: 1.06;
+    margin-bottom: 12px;
+}
+.hero-copy p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.65;
+}
+.hero-aside {
+    display: grid;
+    gap: 12px;
+}
+.aside-panel {
+    padding: 16px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--line);
+}
+.aside-panel strong {
+    display: block;
+    margin-bottom: 8px;
+}
+.stats-grid,
+.summary-grid,
+.device-grid,
+.alert-grid,
+.definition-grid,
+.directory-grid {
+    display: grid;
+    gap: 14px;
+}
+.stats-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.device-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.alert-grid {
+    grid-template-columns: 1.1fr 0.9fr;
+}
+.definition-grid {
+    grid-template-columns: 1fr 1fr;
+}
+.directory-grid {
+    grid-template-columns: 1.1fr 0.9fr;
+}
+.resident-layout {
+    display: grid;
+    gap: 18px;
+}
+.resident-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+.resident-profile-grid .form-group {
+    align-content: start;
+}
+.resident-notes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+.card,
+.table-card {
+    padding: 22px;
+}
+.card h3,
+.table-card h3 {
+    margin: 0 0 10px;
+    font-size: 26px;
+}
+.card p,
+.table-card p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.6;
+}
+.stats-card,
+.summary-card,
+.device-card,
+.alert-card,
+.feed-item,
+.resolved-card,
+.definition-card,
+.directory-card {
+    border-radius: 22px;
+    border: 1px solid var(--line);
+    background: var(--panel-soft);
+}
+.stats-card,
+.summary-card {
+    padding: 18px;
+}
+.stats-card span,
+.summary-card span,
+.mini-label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: var(--muted);
+}
+.stats-card strong {
+    font-size: 30px;
+}
+.stats-card.resolved {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+.summary-card strong {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+.summary-card ul {
+    margin: 10px 0 0;
+    padding-left: 18px;
+    color: var(--muted);
+}
+.info-card {
+    padding: 18px;
+}
+.info-card strong {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.info-card ol {
+    margin: 0;
+    padding-left: 20px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+.device-card {
+    padding: 18px;
+    display: grid;
+    gap: 10px;
+}
+.device-topline {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+}
+.device-title strong {
+    display: block;
+    font-size: 24px;
+    margin-bottom: 6px;
+}
+.device-state {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+.state-monitoring {
+    background: var(--blue-soft);
+    color: var(--blue-ink);
+}
+.state-alert {
+    background: var(--amber-soft);
+    color: var(--amber-ink);
+}
+.state-critical {
+    background: var(--red-soft);
+    color: var(--red-ink);
+}
+.metric-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.metric-pill,
+.telemetry-chip,
+.tiny-pill {
+    padding: 6px 10px;
+    font-size: 12px;
+    background: white;
+    border: 1px solid var(--line);
+    color: var(--ink);
+}
+.telemetry-chip.good {
+    background: var(--green-soft);
+    color: var(--green-ink);
+    border-color: #bbf7d0;
+}
+.telemetry-chip.stable {
+    background: var(--blue-soft);
+    color: var(--blue-ink);
+    border-color: #bfdbfe;
+}
+.telemetry-chip.warn {
+    background: var(--amber-soft);
+    color: var(--amber-ink);
+    border-color: #fed7aa;
+}
+.telemetry-chip.critical {
+    background: var(--red-soft);
+    color: var(--red-ink);
+    border-color: #fecaca;
+}
+.device-meta {
+    color: var(--muted);
+    line-height: 1.55;
+    font-size: 14px;
+}
+.flow-grid {
+    display: grid;
+    grid-template-columns: 0.95fr 1.05fr;
+    gap: 16px;
+}
+.feed-list,
+.resolved-list,
+.priority-list,
+.account-list,
+.policy-list {
+    display: grid;
+    gap: 12px;
+}
+.feed-item,
+.resolved-card,
+.alert-card,
+.definition-card,
+.directory-card {
+    padding: 16px;
+}
+.feed-item strong,
+.resolved-card strong,
+.alert-card strong,
+.definition-card strong,
+.directory-card strong {
+    display: block;
+    margin-bottom: 8px;
+}
+.feed-item.resolved,
+.resolved-card {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+.alert-card {
+    background: #fff7ed;
+    border-color: #fed7aa;
+}
+.alert-card.critical {
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+.alert-card.empty,
+.feed-item.empty,
+.resolved-card.empty,
+.directory-card.empty {
+    background: #f8fafc;
+    border-style: dashed;
+}
+.case-pill,
+.severity-pill {
+    padding: 5px 10px;
+    font-size: 12px;
+}
+.case-resolved {
+    background: var(--green-soft);
+    color: var(--green-ink);
+}
+.case-ongoing {
+    background: var(--red-soft);
+    color: var(--red-ink);
+}
+.severity-minor {
+    background: var(--green-soft);
+    color: var(--green-ink);
+}
+.severity-moderate {
+    background: var(--amber-soft);
+    color: var(--amber-ink);
+}
+.severity-severe,
+.severity-fatal {
+    background: var(--red-soft);
+    color: var(--red-ink);
+}
+.form-grid {
+    display: grid;
+    gap: 16px;
+}
+.form-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+.form-stack {
+    display: grid;
+    gap: 14px;
+}
+.form-group {
+    display: grid;
+    gap: 8px;
+}
+label {
+    font-size: 14px;
+    font-weight: 700;
+}
+input,
+select,
+textarea {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 12px 13px;
+    background: white;
+    color: var(--ink);
+}
+textarea {
+    min-height: 96px;
+    resize: vertical;
+}
+.table-wrap {
+    overflow-x: auto;
 }
 table {
     width: 100%;
+    min-width: 1080px;
     border-collapse: collapse;
 }
-td, th {
-    padding: 12px 10px;
-    border-bottom: 1px solid #ddd;
+th,
+td {
+    padding: 14px 12px;
     text-align: left;
     vertical-align: top;
+    border-bottom: 1px solid var(--line);
 }
-.panel-sub {
-    color: #6b7280;
-    margin-top: -4px;
+th {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+}
+.report-row.resolved-row {
+    background: #f0fdf4;
+}
+.report-row.resolved-row td {
+    border-bottom-color: #bbf7d0;
+}
+.section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
     margin-bottom: 18px;
 }
-.stats-line {
-    font-size: 18px;
-    font-weight: 600;
+.section-header p {
+    margin-top: 8px;
 }
-.empty-row {
-    color: #6b7280;
+.empty-state {
+    color: var(--muted);
+}
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+@media (max-width: 1180px) {
+    .hero-grid,
+    .alert-grid,
+    .flow-grid,
+    .definition-grid,
+    .directory-grid,
+    .resident-profile-grid,
+    .resident-notes-grid,
+    .info-grid,
+    .form-columns,
+    .stats-grid,
+    .summary-grid,
+    .device-grid {
+        grid-template-columns: 1fr;
+    }
 }
 @media (max-width: 980px) {
-    .grid {
-        grid-template-columns: 1fr;
+    .app-shell {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    .sidebar.collapsed {
+        width: 100%;
+        padding: 20px 16px;
+    }
+    .sidebar.collapsed .brand-copy,
+    .sidebar.collapsed .nav-copy,
+    .sidebar.collapsed .sidebar-note,
+    .sidebar.collapsed .sidebar-foot {
+        display: initial;
+    }
+    .sidebar.collapsed .nav-button {
+        text-align: left;
+        padding: 14px;
+    }
+    .main {
+        padding: 16px;
     }
 }
 </style>
 </head>
-
 <body>
+<div class="app-shell">
+    <aside id="sidebar" class="sidebar">
+        <div class="brand">
+            <div class="brand-copy">
+                <div class="brand-badge">State Care Demo</div>
+                <h1>CareLink Edge</h1>
+                <p class="sidebar-note">Elderly care operations, resident safety coordination, and edge-device assisted intervention tracking.</p>
+            </div>
+            <button id="sidebar-toggle" class="sidebar-toggle" type="button" aria-label="Toggle menu">☰</button>
+        </div>
 
-<div class="header">
-    <h1>CareLink Edge Dashboard</h1>
+        <nav class="nav-list" aria-label="Primary">
+            <button class="nav-button active" data-view="dashboard" type="button">
+                <span class="nav-copy">
+                    <span class="nav-title">Dashboard</span>
+                    <span class="nav-meta">Alerts, device health, resolved interventions</span>
+                </span>
+            </button>
+            <button class="nav-button" data-view="residents" type="button">
+                <span class="nav-copy">
+                    <span class="nav-title">Resident Profile Panel</span>
+                    <span class="nav-meta">Profiles, care needs, emergency contacts</span>
+                </span>
+            </button>
+            <button class="nav-button" data-view="incidents" type="button">
+                <span class="nav-copy">
+                    <span class="nav-title">Incident Report Form</span>
+                    <span class="nav-meta">Manual incident entry and follow-up actions</span>
+                </span>
+            </button>
+            <button class="nav-button" data-view="reports" type="button">
+                <span class="nav-copy">
+                    <span class="nav-title">Reports</span>
+                    <span class="nav-meta">Exception log, realtime response history</span>
+                </span>
+            </button>
+            <button class="nav-button" data-view="definitions" type="button">
+                <span class="nav-copy">
+                    <span class="nav-title">Definitions</span>
+                    <span class="nav-meta">Device registry, operator directory, demo rules</span>
+                </span>
+            </button>
+        </nav>
+
+    </aside>
+
+    <main class="main">
+        <div class="topbar">
+            <div>
+                <h2>Care Operations Workspace</h2>
+                <p>Protected live demo for elderly residence monitoring, staff response coordination, and device-assisted care visibility.</p>
+            </div>
+            <div class="topbar-actions">
+                <div class="user-chip">Signed in as {{ current_user }}</div>
+                <div id="demo-status-badge" class="demo-chip {% if demo.enabled %}live{% else %}off{% endif %}">
+                    {% if demo.enabled %}Demo Mode Live{% else %}Demo Mode Off{% endif %}
+                </div>
+                <form method="POST" action="{{ url_for('logout') }}">
+                    <button class="logout-button" type="submit">Logout</button>
+                </form>
+                <button id="demo-toggle" class="action-button {% if demo.enabled %}active{% endif %}" type="button">
+                    {% if demo.enabled %}Stop Demo Mode{% else %}Start Demo Mode{% endif %}
+                </button>
+            </div>
+        </div>
+
+        <div class="workspace">
+            <section id="view-dashboard" class="view active">
+                <div class="hero-panel">
+                    <div class="hero-grid">
+                        <div class="hero-copy">
+                            <h3>Operational Overview</h3>
+                            <strong>One screen for assisted living safety, edge-device monitoring, and caregiver intervention flow.</strong>
+                            <p>Dashboard stays focused on the real promise of the system: connected devices notice changes, staff gets a clear signal, residents receive support, and solved cases become visible immediately.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stats-card">
+                        <span>Residents</span>
+                        <strong id="stat-residents">{{ stats.residents }}</strong>
+                    </div>
+                    <div class="stats-card">
+                        <span>Incident Reports</span>
+                        <strong id="stat-reports">{{ stats.reports }}</strong>
+                    </div>
+                    <div class="stats-card resolved">
+                        <span>Resolved Cases</span>
+                        <strong id="stat-resolved">{{ stats.resolved }}</strong>
+                    </div>
+                    <div class="stats-card">
+                        <span>Critical / Ongoing Cases</span>
+                        <strong id="stat-critical">{{ stats.critical }}</strong>
+                    </div>
+                    <div class="stats-card">
+                        <span>Online Demo Devices</span>
+                        <strong id="stat-devices">{% if demo.enabled %}{{ demo.devices | length }}{% else %}0{% endif %}</strong>
+                    </div>
+                </div>
+
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <span>Priority</span>
+                        <strong>Real-time exceptions stay limited</strong>
+                        <div class="empty-state">Only meaningful alerts stay in focus while the rest of the system shows normal telemetry and resolved care actions.</div>
+                    </div>
+                    <div class="summary-card">
+                        <span>Coordination</span>
+                        <strong>Follow-up is visible</strong>
+                        <div class="empty-state">Every incident carries outcome text so the audience can see not just alerts, but completed staff response.</div>
+                    </div>
+                    <div class="summary-card">
+                        <span>Sync</span>
+                        <strong id="last-refresh">{% if demo.last_tick_at %}Last device sync: {{ demo.last_tick_at }}{% else %}Demo feed ready. Start the simulator to generate live updates.{% endif %}</strong>
+                        <div class="empty-state">Telemetry cadence uses slower sync intervals to feel like real gateways instead of synthetic animation.</div>
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="definition-card info-card">
+                        <strong>How Cases Become Resolved</strong>
+                        <ol>
+                            <li>Device telemetry or staff input creates an exception and opens a visible case.</li>
+                            <li>Caregiver follow-up is recorded as bedside support, medication confirmation, or a manual safety re-check.</li>
+                            <li>When the resident is stable again, the item leaves the urgent queue and moves into green resolved tracking.</li>
+                        </ol>
+                    </div>
+                    <div class="definition-card info-card">
+                        <strong>What The Audience Should Notice</strong>
+                        <ol>
+                            <li>Only a small number of real issues stay active at once.</li>
+                            <li>Most interventions complete quickly and visibly.</li>
+                            <li>Management can verify service quality from the solved timeline, not only from alarm counts.</li>
+                        </ol>
+                    </div>
+                    <div class="definition-card info-card">
+                        <strong>Operational Meaning</strong>
+                        <ol>
+                            <li>Resolved cases reflect a documented response, not a disappeared alert.</li>
+                            <li>Outcome text explains what staff did and why the case was closed.</li>
+                            <li>This keeps the demo aligned with real elderly-care workflow expectations.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-header">
+                        <div>
+                            <h3>Connected Device Fleet</h3>
+                            <p>Each device is presented as a live endpoint with bridge, firmware, signal, latency, and current telemetry.</p>
+                        </div>
+                    </div>
+                    <div id="device-list" class="device-grid"></div>
+                </div>
+
+                <div class="alert-grid">
+                    <div class="card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Main Alert Queue</h3>
+                                <p>High-priority exceptions remain here until the situation is resolved or downgraded.</p>
+                            </div>
+                        </div>
+                        <div id="alert-list" class="priority-list"></div>
+                    </div>
+                    <div class="card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Resolved Interventions</h3>
+                                <p>Closed actions stay green so the audience can see active care delivery, not just incidents.</p>
+                            </div>
+                        </div>
+                        <div id="metric-grid" class="resolved-list"></div>
+                    </div>
+                </div>
+
+                <div class="flow-grid">
+                    <div class="card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Realtime Device Feed</h3>
+                                <p>Telemetry, incident triggers, and follow-up outcomes arrive as a paced event stream.</p>
+                            </div>
+                        </div>
+                        <div id="feed-list" class="feed-list"></div>
+                    </div>
+                    <div class="card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Demo Narrative</h3>
+                                <p>The dashboard is structured to show a full lifecycle, from detection to closed intervention.</p>
+                            </div>
+                        </div>
+                        <div class="definition-grid">
+                            <div class="definition-card">
+                                <strong>1. Sensing</strong>
+                                Bed pressure pads, wrist telemetry, and call buttons stream through edge bridges into the care dashboard.
+                            </div>
+                            <div class="definition-card">
+                                <strong>2. Triage</strong>
+                                Operators immediately see whether an exception is routine, warning-level, or needs escalation.
+                            </div>
+                            <div class="definition-card">
+                                <strong>3. Intervention</strong>
+                                Caregivers deliver bedside support, medication follow-up, or clinical re-checks.
+                            </div>
+                            <div class="definition-card">
+                                <strong>4. Closure</strong>
+                                Solved outcomes appear in green so management can verify service quality at a glance.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-residents" class="view">
+                <div class="hero-panel">
+                    <div class="hero-grid">
+                        <div class="hero-copy">
+                            <h3>Resident Management</h3>
+                            <strong>Resident records combine care context, medical notes, and emergency contact readiness.</strong>
+                            <p>This section helps the audience understand that device alerts are always anchored to real resident profiles and follow-up responsibilities.</p>
+                        </div>
+                        <div class="hero-aside">
+                            <div class="aside-panel">
+                                <strong>Use in practice</strong>
+                                Profiles support shift handoffs, care plans, physician escalation, and incident review.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resident-layout">
+                    <div class="card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Resident Profile Panel</h3>
+                                <p>Complete registration and care context for each resident in a cleaner, full-width workflow.</p>
+                            </div>
+                        </div>
+                        <form method="POST" action="{{ url_for('create_resident') }}" class="form-grid">
+                            <div class="resident-profile-grid">
+                                <div class="form-group"><label>Full Name</label><input name="full_name" required></div>
+                                <div class="form-group"><label>Date of Birth</label><input name="date_of_birth" required></div>
+                                <div class="form-group"><label>ID Number</label><input name="id_number" required></div>
+                                <div class="form-group"><label>Nationality</label><input name="nationality" required></div>
+                                <div class="form-group"><label>Blood Group</label><input name="blood_group" required></div>
+                                <div class="form-group"><label>Diet</label><input name="diet" required></div>
+                                <div class="form-group"><label>Height (cm)</label><input name="height_cm"></div>
+                                <div class="form-group"><label>Weight (kg)</label><input name="weight_kg"></div>
+                                <div class="form-group"><label>Photo Path</label><input name="photo_path"></div>
+                                <div class="form-group"><label>Emergency Contact Name</label><input name="emergency_contact_name" required></div>
+                                <div class="form-group"><label>Emergency Contact Phone</label><input name="emergency_contact_phone" required></div>
+                                <div class="form-group"><label>Emergency Contact Relationship</label><input name="emergency_contact_relationship" required></div>
+                                <div class="form-group"><label>Primary Physician Name</label><input name="primary_physician_name"></div>
+                                <div class="form-group"><label>Primary Physician Phone</label><input name="primary_physician_phone"></div>
+                            </div>
+                            <div class="resident-notes-grid">
+                                <div class="form-group"><label>Allergies</label><textarea name="allergies" required></textarea></div>
+                                <div class="form-group"><label>Disability</label><textarea name="disability" required></textarea></div>
+                                <div class="form-group"><label>Medical History</label><textarea name="medical_history"></textarea></div>
+                                <div class="form-group"><label>Current Medications</label><textarea name="current_medications"></textarea></div>
+                                <div class="form-group"><label>ADL Needs</label><textarea name="adl_needs"></textarea></div>
+                                <div class="form-group"><label>Religious / Cultural Preferences</label><textarea name="religious_cultural_preferences"></textarea></div>
+                            </div>
+                            <div class="form-group"><label>Notes / Special Instructions</label><textarea name="notes" required></textarea></div>
+                            <button class="action-button" type="submit">Add Resident</button>
+                        </form>
+                    </div>
+
+                    <div class="table-card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Resident Registry</h3>
+                                <p>Resident information stays available to staff when alerts, medications, or emergency events occur.</p>
+                            </div>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Full Name</th>
+                                        <th>DOB</th>
+                                        <th>ID Number</th>
+                                        <th>Nationality</th>
+                                        <th>Blood Group</th>
+                                        <th>Allergies</th>
+                                        <th>Diet</th>
+                                        <th>Disability</th>
+                                        <th>Height</th>
+                                        <th>Weight</th>
+                                        <th>Emergency Contact</th>
+                                        <th>Notes</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="residents-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-incidents" class="view">
+                <div class="hero-panel">
+                    <div class="hero-grid">
+                        <div class="hero-copy">
+                            <h3>Incident Entry</h3>
+                            <strong>Manual reporting stays available alongside device-triggered events for complete operational traceability.</strong>
+                            <p>Staff can enter care incidents, add clinical observations, and document outcome text that later appears inside the reports workflow.</p>
+                        </div>
+                        <div class="hero-aside">
+                            <div class="aside-panel">
+                                <strong>Presentation angle</strong>
+                                Manual and automated entries live in the same system, showing flexibility for facilities with mixed staffing and hardware readiness.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-columns">
+                    <div class="card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Incident Report Form</h3>
+                                <p>Capture what happened, the vital readings, what action was taken, and how the case ended.</p>
+                            </div>
+                        </div>
+                        <form method="POST" action="{{ url_for('create_report') }}" class="form-grid">
+                            <div class="form-columns">
+                                <div class="form-stack">
+                                    <div class="form-group"><label>Date & Time of Event</label><input name="event_datetime" placeholder="YYYY-MM-DD HH:MM" required></div>
+                                    <div class="form-group">
+                                        <label>Select Resident</label>
+                                        <select id="resident-select" name="resident_id" required>
+                                            <option value="">Choose resident</option>
+                                            {% for r in residents %}
+                                            <option value="{{ r.id }}">{{ r.full_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Event Type</label>
+                                        <select name="event_type" required>
+                                            <option value="">Choose event</option>
+                                            <option value="Fall">Fall</option>
+                                            <option value="Medication Error">Medication Error</option>
+                                            <option value="Behavioral">Behavioral</option>
+                                            <option value="Injury">Injury</option>
+                                            <option value="Vital Change">Vital Change</option>
+                                            <option value="Emergency">Emergency</option>
+                                            <option value="Check-up">Check-up</option>
+                                            <option value="Infection">Infection</option>
+                                            <option value="Wandering">Wandering</option>
+                                            <option value="Abuse">Abuse</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Severity</label>
+                                        <select name="severity" required>
+                                            <option value="">Choose severity</option>
+                                            <option value="Minor">Minor</option>
+                                            <option value="Moderate">Moderate</option>
+                                            <option value="Severe">Severe</option>
+                                            <option value="Fatal">Fatal</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select name="case_status" required>
+                                            <option value="">Choose status</option>
+                                            <option value="Resolved">Resolved</option>
+                                            <option value="Ongoing">Ongoing</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-stack">
+                                    <div class="form-group"><label>Pulse</label><input name="pulse"></div>
+                                    <div class="form-group"><label>Blood Pressure</label><input name="blood_pressure"></div>
+                                    <div class="form-group"><label>Temperature</label><input name="temperature"></div>
+                                    <div class="form-group"><label>Oxygen Saturation</label><input name="oxygen_saturation"></div>
+                                    <div class="form-group"><label>Respiration Rate</label><input name="respiration_rate"></div>
+                                    <div class="form-group"><label>Location</label><input name="location"></div>
+                                </div>
+                            </div>
+                            <div class="form-group"><label>Event Description</label><textarea name="description" required></textarea></div>
+                            <div class="form-columns">
+                                <div class="form-stack">
+                                    <div class="form-group"><label>Medication Name</label><input name="medication_name"></div>
+                                    <div class="form-group"><label>Medication Dosage</label><input name="medication_dosage"></div>
+                                    <div class="form-group"><label>Medication Time</label><input name="medication_time"></div>
+                                    <div class="form-group"><label>Medication Correctness</label><input name="medication_correctness"></div>
+                                </div>
+                                <div class="form-stack">
+                                    <div class="form-group"><label>Witnesses</label><textarea name="witnesses"></textarea></div>
+                                    <div class="form-group"><label>Immediate Actions Taken</label><textarea name="immediate_actions_taken"></textarea></div>
+                                </div>
+                            </div>
+                            <div class="form-group"><label>Notifications</label><textarea name="notifications"></textarea></div>
+                            <div class="form-group"><label>Follow-up / Outcome</label><textarea name="follow_up_outcome"></textarea></div>
+                            <div class="form-group"><label>Staff Involved / Signature</label><input name="staff_involved_signature"></div>
+                            <button class="action-button" type="submit">Add Incident Report</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Realtime Exception Preview</h3>
+                                <p>Operators can review open exceptions here and manually close them after caregiver follow-up.</p>
+                            </div>
+                        </div>
+                        <div id="incident-side-feed" class="feed-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-reports" class="view">
+                <div class="hero-panel">
+                    <div class="hero-grid">
+                        <div class="hero-copy">
+                            <h3>Reports & Resolution History</h3>
+                            <strong>The reports surface keeps the full narrative: event, measurements, staff response, and solved outcome.</strong>
+                            <p>This is the section to show auditors, administrators, and care facility managers how exception handling becomes measurable service delivery.</p>
+                        </div>
+                        <div class="hero-aside">
+                            <div class="aside-panel">
+                                <strong>Why it matters</strong>
+                                Public-sector buyers need proof that alerts do not disappear into a black box and that staff follow-up is visible.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-grid">
+                    <div class="card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Active Exceptions</h3>
+                                <p>Urgent cases stay isolated from the larger historical report list.</p>
+                            </div>
+                        </div>
+                        <div id="reports-alert-list" class="priority-list"></div>
+                    </div>
+                    <div class="card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Resolved Timeline</h3>
+                                <p>Closed interventions remain visible as evidence of action and care quality.</p>
+                            </div>
+                        </div>
+                        <div id="reports-resolved-list" class="resolved-list"></div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="section-header">
+                        <div>
+                            <h3>Incident Reports</h3>
+                            <p>Complete report history with severity, status, vitals, medication notes, and outcomes.</p>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Resident</th>
+                                    <th>ID Number</th>
+                                    <th>Blood Group</th>
+                                    <th>Height (cm)</th>
+                                    <th>Weight (kg)</th>
+                                    <th>Date & Time</th>
+                                    <th>Event Type</th>
+                                    <th>Severity</th>
+                                    <th>Status</th>
+                                    <th>Location</th>
+                                    <th>Vital Signs</th>
+                                    <th>Medication</th>
+                                    <th>Witnesses</th>
+                                    <th>Outcome</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="reports-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-definitions" class="view">
+                <div class="hero-panel">
+                    <div class="hero-grid">
+                        <div class="hero-copy">
+                            <h3>Definitions & Demo Control</h3>
+                            <strong>Support screens explain how the deployment would be configured inside a real residence.</strong>
+                            <p>This section groups device registry, workflow assumptions, operator directory, and demo-only administration tools without introducing database risk.</p>
+                        </div>
+                        <div class="hero-aside">
+                            <div class="aside-panel">
+                                <strong>Important note</strong>
+                                Login access remains static and protected. The user directory below is presentation-only and does not alter authentication.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="definition-grid">
+                    <div class="card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Device Registry</h3>
+                                <p>Configured demo hardware and bridge assignments.</p>
+                            </div>
+                        </div>
+                        <div id="definitions-device-list" class="feed-list"></div>
+                    </div>
+                    <div class="card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Facility Definitions</h3>
+                                <p>Demo policies that explain how the institution would operationalize the system.</p>
+                            </div>
+                        </div>
+                        <div class="policy-list">
+                            <div class="definition-card">
+                                <strong>Priority handling rule</strong>
+                                Vital or emergency exceptions remain in the main queue until acknowledged or medically downgraded.
+                            </div>
+                            <div class="definition-card">
+                                <strong>Closure visibility</strong>
+                                Resolved outcomes stay green on the dashboard to support oversight and audit readiness.
+                            </div>
+                            <div class="definition-card">
+                                <strong>Device model</strong>
+                                FPGA-assisted sensing can trigger local hardware logic while ESP32 bridges forward packaged data into the backend.
+                            </div>
+                            <div class="definition-card">
+                                <strong>Deployment path</strong>
+                                Start in municipal pilot homes, then extend to larger state-supported care centers after field validation.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="directory-grid">
+                    <div class="card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Operator Directory</h3>
+                                <p>Demo-only list for presentation purposes. Add and remove names without touching authentication.</p>
+                            </div>
+                        </div>
+                        <div id="operator-list" class="account-list"></div>
+                    </div>
+                    <div class="card">
+                        <div class="section-header">
+                            <div>
+                                <h3>Add Demo Operator</h3>
+                                <p>Use this during the presentation to show role-based operational staffing.</p>
+                            </div>
+                        </div>
+                        <form id="operator-form" class="form-grid">
+                            <div class="form-group"><label>Full Name</label><input id="operator-name" required></div>
+                            <div class="form-group"><label>Role</label><input id="operator-role" required></div>
+                            <div class="form-group"><label>Shift</label><input id="operator-shift" placeholder="Day / Night / On-call" required></div>
+                            <button class="action-button" type="submit">Add Demo Operator</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
 </div>
 
-<div class="container">
+<script>
+const state = {
+    residents: {{ residents | tojson }},
+    reports: {{ reports | tojson }},
+    stats: {{ stats | tojson }},
+    demo: {{ demo | tojson }},
+};
 
-    <div class="card">
-        <h2>System Stats</h2>
-        <div class="stats-line">
-            Residents: {{ stats.residents }} |
-            Incident Reports: {{ stats.reports }} |
-            Critical / Ongoing Cases: {{ stats.critical }}
+const basePath = {{ request.script_root | tojson }};
+const defaultOperators = [
+    { name: "Elif Karaca", role: "Lead Care Coordinator", shift: "Day" },
+    { name: "Murat Aslan", role: "Night Shift Supervisor", shift: "Night" },
+    { name: "Derya Ates", role: "Clinical Liaison Nurse", shift: "On-call" },
+];
+
+let pollTimer = null;
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+function parseLatency(value) {
+    const match = String(value || "").match(/(\d+)/);
+    return match ? Number(match[1]) : null;
+}
+
+function latencyClass(value) {
+    const latency = parseLatency(value);
+    if (latency === null) return "stable";
+    if (latency <= 45) return "good";
+    if (latency <= 80) return "stable";
+    if (latency <= 120) return "warn";
+    return "critical";
+}
+
+function signalClass(value) {
+    const match = String(value || "").match(/-?(\d+)/);
+    const signal = match ? Number(match[0]) : null;
+    if (signal === null) return "stable";
+    if (signal >= -55) return "good";
+    if (signal >= -70) return "stable";
+    if (signal >= -82) return "warn";
+    return "critical";
+}
+
+function powerClass(value) {
+    const match = String(value || "").match(/(\d+)/);
+    const power = match ? Number(match[1]) : null;
+    if (power === null || String(value).includes("AC")) return "good";
+    if (power >= 70) return "good";
+    if (power >= 40) return "stable";
+    if (power >= 20) return "warn";
+    return "critical";
+}
+
+function caseClass(caseStatus) {
+    return caseStatus === "Resolved" ? "case-resolved" : "case-ongoing";
+}
+
+function severityClass(severity) {
+    const key = String(severity || "").toLowerCase();
+    return `severity-${key}`;
+}
+
+function stateClass(status) {
+    const key = String(status || "").toLowerCase();
+    if (key.includes("critical")) return "state-critical";
+    if (key.includes("alert")) return "state-alert";
+    return "state-monitoring";
+}
+
+function loadOperators() {
+    try {
+        const saved = window.localStorage.getItem("carelink_demo_operators");
+        return saved ? JSON.parse(saved) : defaultOperators;
+    } catch (error) {
+        return defaultOperators;
+    }
+}
+
+function saveOperators(items) {
+    window.localStorage.setItem("carelink_demo_operators", JSON.stringify(items));
+}
+
+function recentResolvedReports() {
+    return (state.reports || []).filter((report) => report.case_status === "Resolved").slice(0, 4);
+}
+
+function activeReports() {
+    return (state.reports || []).filter((report) => report.case_status !== "Resolved").slice(0, 4);
+}
+
+function renderStats() {
+    document.getElementById("stat-residents").textContent = state.stats.residents ?? 0;
+    document.getElementById("stat-reports").textContent = state.stats.reports ?? 0;
+    document.getElementById("stat-resolved").textContent = state.stats.resolved ?? 0;
+    document.getElementById("stat-critical").textContent = state.stats.critical ?? 0;
+    document.getElementById("stat-devices").textContent = state.demo.enabled ? (state.demo.devices || []).length : 0;
+    document.getElementById("last-refresh").textContent = state.demo.last_tick_at
+        ? `Last device sync: ${state.demo.last_tick_at}`
+        : "Demo feed ready. Start the simulator to generate live updates.";
+}
+
+function renderDemoHeader() {
+    const badge = document.getElementById("demo-status-badge");
+    const toggle = document.getElementById("demo-toggle");
+    const isEnabled = !!state.demo.enabled;
+
+    badge.textContent = isEnabled ? "Demo Mode Live" : "Demo Mode Off";
+    badge.className = `demo-chip ${isEnabled ? "live" : "off"}`;
+    toggle.textContent = isEnabled ? "Stop Demo Mode" : "Start Demo Mode";
+    toggle.classList.toggle("active", isEnabled);
+}
+
+function renderDevices() {
+    const devices = state.demo.devices || [];
+    const html = devices.length ? devices.map((device) => `
+        <div class="device-card">
+            <div class="device-topline">
+                <div class="device-title">
+                    <strong>${escapeHtml(device.name)}</strong>
+                    <div>${escapeHtml(device.label || "")}</div>
+                </div>
+                <span class="device-state ${stateClass(device.status)}">${escapeHtml(device.status || "Monitoring")}</span>
+            </div>
+            <div class="device-meta">Assigned resident: ${escapeHtml(device.assigned_to || "—")}<br>Bridge: ${escapeHtml(device.bridge || "—")}<br>Firmware: ${escapeHtml(device.firmware || "—")}</div>
+            <div class="metric-row">
+                <span class="telemetry-chip ${powerClass(device.power)}">${escapeHtml(device.power || "—")}</span>
+                <span class="telemetry-chip ${signalClass(device.signal)}">${escapeHtml(device.signal || "—")}</span>
+                <span class="telemetry-chip ${latencyClass(device.latency)}">${escapeHtml(device.latency || "—")}</span>
+            </div>
+            <div class="device-meta">${escapeHtml(device.last_reading || "")}</div>
+            <div class="metric-row">
+                <span class="metric-pill">${escapeHtml(device.telemetry?.primary || "")}</span>
+                <span class="metric-pill">${escapeHtml(device.telemetry?.secondary || "")}</span>
+                <span class="metric-pill">${escapeHtml(device.telemetry?.tertiary || "")}</span>
+            </div>
         </div>
-    </div>
+    `).join("") : '<div class="device-card empty-state">No devices configured yet.</div>';
 
-    <div class="grid">
+    document.getElementById("device-list").innerHTML = html;
+    document.getElementById("definitions-device-list").innerHTML = html;
+}
 
-        <div class="card">
-            <h2>Resident Profile Panel</h2>
-            <p class="panel-sub">Complete resident registration profile.</p>
-
-            <form method="POST" action="/add_resident">
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input name="full_name" placeholder="Full Name" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Date of Birth</label>
-                    <input name="date_of_birth" placeholder="Date of Birth" required>
-                </div>
-
-                <div class="form-group">
-                    <label>ID Number</label>
-                    <input name="id_number" placeholder="ID Number / Passport No" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Nationality</label>
-                    <input name="nationality" placeholder="Nationality" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Blood Group</label>
-                    <input name="blood_group" placeholder="A+, O-, AB+, etc." required>
-                </div>
-
-                <div class="form-group">
-                    <label>Allergies</label>
-                    <textarea name="allergies" placeholder="Medication, food, latex, etc." required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Diet</label>
-                    <input name="diet" placeholder="Diabetic, low salt, vegetarian, etc." required>
-                </div>
-
-                <div class="form-group">
-                    <label>Disability</label>
-                    <textarea name="disability" placeholder="Physical, hearing, vision, cognitive, etc." required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Height (cm)</label>
-                    <input name="height_cm" placeholder="Height in cm">
-                </div>
-
-                <div class="form-group">
-                    <label>Weight (kg)</label>
-                    <input name="weight_kg" placeholder="Weight in kg">
-                </div>
-
-                <div class="form-group">
-                    <label>Emergency Contact Name</label>
-                    <input name="emergency_contact_name" placeholder="Emergency Contact Name" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Emergency Contact Phone</label>
-                    <input name="emergency_contact_phone" placeholder="Emergency Contact Phone" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Emergency Contact Relationship</label>
-                    <input name="emergency_contact_relationship" placeholder="Son, daughter, spouse, etc." required>
-                </div>
-
-                <div class="form-group">
-                    <label>Primary Physician Name</label>
-                    <input name="primary_physician_name" placeholder="Primary Physician Name">
-                </div>
-
-                <div class="form-group">
-                    <label>Primary Physician Phone</label>
-                    <input name="primary_physician_phone" placeholder="Primary Physician Phone">
-                </div>
-
-                <div class="form-group">
-                    <label>Primary Physician Address</label>
-                    <textarea name="primary_physician_address" placeholder="Primary Physician Address"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Medical History</label>
-                    <textarea name="medical_history" placeholder="Heart disease, diabetes, dementia, stroke, with dates"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Current Medications</label>
-                    <textarea name="current_medications" placeholder="Medication list, dosage, morning/evening"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Vaccinations</label>
-                    <textarea name="vaccinations" placeholder="Flu, pneumococcal, COVID, etc."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Infectious Diseases</label>
-                    <textarea name="infectious_diseases" placeholder="Hepatitis, tuberculosis, etc."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>ADL Needs</label>
-                    <textarea name="adl_needs" placeholder="Eating, bathing, toileting, mobility assistance"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Religious / Cultural Preferences</label>
-                    <textarea name="religious_cultural_preferences" placeholder="Prayer times, holiday practices, food restrictions"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Photo Path</label>
-                    <input name="photo_path" placeholder="Photo filename or path">
-                </div>
-
-                <div class="form-group">
-                    <label>Notes / Special Instructions</label>
-                    <textarea name="notes" placeholder="Do not leave alone, speaks English, etc." required></textarea>
-                </div>
-
-                <button type="submit">Add Resident</button>
-            </form>
+function renderAlerts() {
+    const alerts = state.demo.active_alerts || [];
+    const html = alerts.length ? alerts.map((alert) => `
+        <div class="alert-card ${alert.level === "critical" ? "critical" : ""}">
+            <strong>${escapeHtml(alert.scenario)}</strong>
+            <div>${escapeHtml(alert.resident_name)} • ${escapeHtml(alert.device_name)}</div>
+            <div>${escapeHtml(alert.reading)} • ${escapeHtml(alert.severity)}</div>
+            <div class="mini-label">${escapeHtml(alert.time)}</div>
         </div>
+    `).join("") : '<div class="alert-card empty"><strong>No urgent queue items</strong><div class="empty-state">Most demo incidents are resolved after caregiver follow-up.</div></div>';
 
-        <div class="card">
-            <h2>Incident Report Form</h2>
-            <p class="panel-sub">Linked to resident records with clinical and operational details.</p>
+    document.getElementById("alert-list").innerHTML = html;
+    document.getElementById("reports-alert-list").innerHTML = html;
+}
 
-            <form method="POST" action="/add_report">
-                <div class="form-group">
-                    <label>Date & Time of Event</label>
-                    <input name="event_datetime" placeholder="YYYY-MM-DD HH:MM" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Select Resident</label>
-                    <select name="resident_id" required>
-                        <option value="">Choose resident</option>
-                        {% for r in residents %}
-                        <option value="{{ r.id }}">{{ r.full_name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Event Type</label>
-                    <select name="event_type" required>
-                        <option value="">Choose event</option>
-                        <option value="Fall">Fall</option>
-                        <option value="Medication Error">Medication Error</option>
-                        <option value="Behavioral">Behavioral</option>
-                        <option value="Injury">Injury</option>
-                        <option value="Vital Change">Vital Change</option>
-                        <option value="Emergency">Emergency</option>
-                        <option value="Check-up">Check-up</option>
-                        <option value="Infection">Infection</option>
-                        <option value="Wandering">Wandering</option>
-                        <option value="Abuse">Abuse</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Severity</label>
-                    <select name="severity" required>
-                        <option value="">Choose severity</option>
-                        <option value="Minor">Minor</option>
-                        <option value="Moderate">Moderate</option>
-                        <option value="Severe">Severe</option>
-                        <option value="Fatal">Fatal</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Status</label>
-                    <select name="case_status" required>
-                        <option value="">Choose status</option>
-                        <option value="Resolved">Resolved</option>
-                        <option value="Ongoing">Ongoing</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Event Description</label>
-                    <textarea name="description" placeholder="What happened, where, how, who witnessed it" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Pulse</label>
-                    <input name="pulse" placeholder="Pulse">
-                </div>
-
-                <div class="form-group">
-                    <label>Blood Pressure</label>
-                    <input name="blood_pressure" placeholder="Blood Pressure">
-                </div>
-
-                <div class="form-group">
-                    <label>Temperature</label>
-                    <input name="temperature" placeholder="Temperature">
-                </div>
-
-                <div class="form-group">
-                    <label>Oxygen Saturation (SpO₂)</label>
-                    <input name="oxygen_saturation" placeholder="SpO₂">
-                </div>
-
-                <div class="form-group">
-                    <label>Respiration Rate</label>
-                    <input name="respiration_rate" placeholder="Respiration Rate">
-                </div>
-
-                <div class="form-group">
-                    <label>Medication Name</label>
-                    <input name="medication_name" placeholder="Medication Name">
-                </div>
-
-                <div class="form-group">
-                    <label>Medication Dosage</label>
-                    <input name="medication_dosage" placeholder="Medication Dosage">
-                </div>
-
-                <div class="form-group">
-                    <label>Medication Time</label>
-                    <input name="medication_time" placeholder="Medication Time">
-                </div>
-
-                <div class="form-group">
-                    <label>Medication Correctness</label>
-                    <input name="medication_correctness" placeholder="Correct / Incorrect">
-                </div>
-
-                <div class="form-group">
-                    <label>Witnesses</label>
-                    <textarea name="witnesses" placeholder="Witness name + role"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Location</label>
-                    <input name="location" placeholder="Room, garden, dining area, etc.">
-                </div>
-
-                <div class="form-group">
-                    <label>Immediate Actions Taken</label>
-                    <textarea name="immediate_actions_taken" placeholder="First aid, doctor notified, ambulance called, etc."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Notifications</label>
-                    <textarea name="notifications" placeholder="Family, doctor, management informed + date/time"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Follow-up / Outcome</label>
-                    <textarea name="follow_up_outcome" placeholder="Recovery status, hospital transfer, family informed"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Staff Involved / Signature</label>
-                    <input name="staff_involved_signature" placeholder="Staff name / signature">
-                </div>
-
-                <button type="submit">Add Incident Report</button>
-            </form>
+function renderFeed() {
+    const feed = state.demo.feed || [];
+    const html = feed.length ? feed.map((item) => `
+        <div class="feed-item ${item.case_status === "Resolved" ? "resolved" : ""}">
+            <strong>${escapeHtml(item.scenario)}</strong>
+            <div>${escapeHtml(item.resident_name)} • ${escapeHtml(item.device_name)}</div>
+            <div>${escapeHtml(item.location)} • ${escapeHtml(item.reading)}</div>
+            <div class="metric-row" style="margin-top:8px;">
+                <span class="case-pill ${caseClass(item.case_status)}">${escapeHtml(item.case_status || "—")}</span>
+                <span class="severity-pill ${severityClass(item.severity)}">${escapeHtml(item.severity || "—")}</span>
+            </div>
+            <div class="device-meta">${escapeHtml(item.outcome || "")}</div>
+            <div class="mini-label">${escapeHtml(item.time)}</div>
         </div>
+    `).join("") : '<div class="feed-item empty"><strong>No telemetry exceptions yet</strong><div class="empty-state">Start demo mode to stream live device events.</div></div>';
 
-    </div>
+    document.getElementById("feed-list").innerHTML = html;
+}
 
-    <div class="card">
-        <h2>Residents</h2>
-        <table>
-            <tr>
-                <th>Full Name</th>
-                <th>DOB</th>
-                <th>ID Number</th>
-                <th>Nationality</th>
-                <th>Blood Group</th>
-                <th>Allergies</th>
-                <th>Diet</th>
-                <th>Disability</th>
-                <th>Height (cm)</th>
-                <th>Weight (kg)</th>
-                <th>Emergency Contact</th>
-                <th>Notes</th>
-                <th></th>
-            </tr>
+function renderIncidentPreview() {
+    const reports = activeReports();
+    const html = reports.length ? reports.map((report) => `
+        <div class="feed-item">
+            <strong>${escapeHtml(report.event_type || "Open exception")}</strong>
+            <div>${escapeHtml(report.resident_name || "Resident")} • ${escapeHtml(report.location || "Care zone")}</div>
+            <div>${escapeHtml(report.description || "Awaiting caregiver follow-up")}</div>
+            <div class="metric-row" style="margin-top:8px;">
+                <span class="case-pill ${caseClass(report.case_status)}">${escapeHtml(report.case_status || "Ongoing")}</span>
+                <span class="severity-pill ${severityClass(report.severity)}">${escapeHtml(report.severity || "—")}</span>
+            </div>
+            <div class="mini-label">${escapeHtml(report.event_datetime || report.created_at || "")}</div>
+            <button class="resolve-button" type="button" onclick="markReportResolved(${report.id})">Mark as Resolved</button>
+        </div>
+    `).join("") : '<div class="feed-item empty"><strong>No open exceptions</strong><div class="empty-state">When an active case appears, staff can close it here with a manual follow-up action.</div></div>';
 
-            {% for resident in residents %}
-            <tr>
-                <td>{{ resident["full_name"] }}</td>
-                <td>{{ resident["date_of_birth"] or "—" }}</td>
-                <td>{{ resident["id_number"] or "—" }}</td>
-                <td>{{ resident["nationality"] or "—" }}</td>
-                <td>{{ resident["blood_group"] or "—" }}</td>
-                <td>{{ resident["allergies"] or "—" }}</td>
-                <td>{{ resident["diet"] or "—" }}</td>
-                <td>{{ resident["disability"] or "—" }}</td>
-                <td>{{ resident["height_cm"] or "—" }}</td>
-                <td>{{ resident["weight_kg"] or "—" }}</td>
-                <td>
-                    {{ resident["emergency_contact_name"] or "—" }}<br>
-                    {{ resident["emergency_contact_phone"] or "" }}<br>
-                    {{ resident["emergency_contact_relationship"] or "" }}
-                </td>
-                <td>{{ resident["notes"] or "—" }}</td>
-                <td>
-                    <form method="POST" action="/delete_resident/{{ resident['id'] }}">
-                        <button class="delete">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
+    document.getElementById("incident-side-feed").innerHTML = html;
+}
 
-            {% if not residents %}
-            <tr>
-                <td colspan="13" class="empty-row">No residents yet.</td>
-            </tr>
-            {% endif %}
-        </table>
-    </div>
+function renderResolvedCards() {
+    const reports = recentResolvedReports();
+    const html = reports.length ? reports.map((report) => `
+        <div class="resolved-card">
+            <strong>${escapeHtml(report.resident_name)}</strong>
+            <div>${escapeHtml(report.event_type || "Event")} closed successfully</div>
+            <div class="metric-row" style="margin-top:8px;">
+                <span class="metric-pill">Pulse ${escapeHtml(report.pulse || "—")}</span>
+                <span class="metric-pill">SpO₂ ${escapeHtml(report.oxygen_saturation || "—")}</span>
+            </div>
+            <div class="device-meta">${escapeHtml(report.follow_up_outcome || "Follow-up completed")}</div>
+            <div class="mini-label">${escapeHtml(report.event_datetime || report.created_at || "")}</div>
+        </div>
+    `).join("") : '<div class="resolved-card empty"><strong>No resolved interventions yet</strong><div class="empty-state">Resolved outcomes will appear here in green as the demo advances.</div></div>';
 
-    <div class="card">
-        <h2>Incident Reports</h2>
-        <table>
-            <tr>
-                <th>Resident</th>
-                <th>ID Number</th>
-                <th>Blood Group</th>
-                <th>Height (cm)</th>
-                <th>Weight (kg)</th>
-                <th>Date & Time</th>
-                <th>Event Type</th>
-                <th>Severity</th>
-                <th>Status</th>
-                <th>Location</th>
-                <th>Vital Signs</th>
-                <th>Medication</th>
-                <th>Witnesses</th>
-                <th>Outcome</th>
-                <th></th>
-            </tr>
+    document.getElementById("metric-grid").innerHTML = html;
+    document.getElementById("reports-resolved-list").innerHTML = html;
+}
 
-            {% for report in reports %}
-            <tr>
-                <td>{{ report["resident_name"] }}</td>
-                <td>{{ report["resident_id_number"] or "—" }}</td>
-                <td>{{ report["resident_blood_group"] or "—" }}</td>
-                <td>{{ report["resident_height_cm"] or "—" }}</td>
-                <td>{{ report["resident_weight_kg"] or "—" }}</td>
-                <td>{{ report["event_datetime"] or report["created_at"] }}</td>
-                <td>{{ report["event_type"] }}</td>
-                <td>{{ report["severity"] or "—" }}</td>
-                <td>{{ report["case_status"] or "—" }}</td>
-                <td>{{ report["location"] or "—" }}</td>
-                <td>
-                    Pulse: {{ report["pulse"] or "—" }}<br>
-                    BP: {{ report["blood_pressure"] or "—" }}<br>
-                    Temp: {{ report["temperature"] or "—" }}<br>
-                    SpO₂: {{ report["oxygen_saturation"] or "—" }}<br>
-                    Resp: {{ report["respiration_rate"] or "—" }}
-                </td>
-                <td>
-                    {{ report["medication_name"] or "—" }}<br>
-                    {{ report["medication_dosage"] or "" }}<br>
-                    {{ report["medication_time"] or "" }}<br>
-                    {{ report["medication_correctness"] or "" }}
-                </td>
-                <td>{{ report["witnesses"] or "—" }}</td>
-                <td>{{ report["follow_up_outcome"] or "—" }}</td>
-                <td>
-                    <form method="POST" action="/delete_report/{{ report['id'] }}">
-                        <button class="delete">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
+function renderResidents() {
+    const residents = state.residents || [];
+    const body = document.getElementById("residents-body");
+    if (!residents.length) {
+        body.innerHTML = '<tr><td colspan="13" class="empty-state">No residents yet.</td></tr>';
+        return;
+    }
 
-            {% if not reports %}
-            <tr>
-                <td colspan="15" class="empty-row">No incident reports yet.</td>
-            </tr>
-            {% endif %}
-        </table>
-    </div>
+    body.innerHTML = residents.map((resident) => `
+        <tr>
+            <td>${escapeHtml(resident.full_name)}</td>
+            <td>${escapeHtml(resident.date_of_birth || "—")}</td>
+            <td>${escapeHtml(resident.id_number || "—")}</td>
+            <td>${escapeHtml(resident.nationality || "—")}</td>
+            <td>${escapeHtml(resident.blood_group || "—")}</td>
+            <td>${escapeHtml(resident.allergies || "—")}</td>
+            <td>${escapeHtml(resident.diet || "—")}</td>
+            <td>${escapeHtml(resident.disability || "—")}</td>
+            <td>${escapeHtml(resident.height_cm || "—")}</td>
+            <td>${escapeHtml(resident.weight_kg || "—")}</td>
+            <td>${escapeHtml(resident.emergency_contact_name || "—")}<br>${escapeHtml(resident.emergency_contact_phone || "")}<br>${escapeHtml(resident.emergency_contact_relationship || "")}</td>
+            <td>${escapeHtml(resident.notes || "—")}</td>
+            <td>
+                <form method="POST" action="${basePath}/delete_resident/${resident.id}">
+                    <button class="danger-button" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+    `).join("");
+}
 
-</div>
+function renderReports() {
+    const reports = state.reports || [];
+    const body = document.getElementById("reports-body");
+    if (!reports.length) {
+        body.innerHTML = '<tr><td colspan="15" class="empty-state">No incident reports yet.</td></tr>';
+        return;
+    }
 
+    body.innerHTML = reports.map((report) => `
+        <tr class="report-row ${report.case_status === "Resolved" ? "resolved-row" : ""}">
+            <td>${escapeHtml(report.resident_name)}</td>
+            <td>${escapeHtml(report.resident_id_number || "—")}</td>
+            <td>${escapeHtml(report.resident_blood_group || "—")}</td>
+            <td>${escapeHtml(report.resident_height_cm || "—")}</td>
+            <td>${escapeHtml(report.resident_weight_kg || "—")}</td>
+            <td>${escapeHtml(report.event_datetime || report.created_at || "—")}</td>
+            <td>${escapeHtml(report.event_type || "—")}</td>
+            <td><span class="severity-pill ${severityClass(report.severity)}">${escapeHtml(report.severity || "—")}</span></td>
+            <td><span class="case-pill ${caseClass(report.case_status)}">${escapeHtml(report.case_status || "—")}</span></td>
+            <td>${escapeHtml(report.location || "—")}</td>
+            <td>Pulse: ${escapeHtml(report.pulse || "—")}<br>BP: ${escapeHtml(report.blood_pressure || "—")}<br>Temp: ${escapeHtml(report.temperature || "—")}<br>SpO₂: ${escapeHtml(report.oxygen_saturation || "—")}<br>Resp: ${escapeHtml(report.respiration_rate || "—")}</td>
+            <td>${escapeHtml(report.medication_name || "—")}<br>${escapeHtml(report.medication_dosage || "")}<br>${escapeHtml(report.medication_time || "")}<br>${escapeHtml(report.medication_correctness || "")}</td>
+            <td>${escapeHtml(report.witnesses || "—")}</td>
+            <td>${escapeHtml(report.follow_up_outcome || "—")}</td>
+            <td>
+                <form method="POST" action="${basePath}/delete_report/${report.id}">
+                    <button class="danger-button" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+    `).join("");
+}
+
+async function markReportResolved(reportId) {
+    const outcome = window.prompt(
+        "Follow-up note for this resolved case:",
+        "Caregiver reached the resident, completed the safety check, and closed the case."
+    );
+
+    if (outcome === null) {
+        return;
+    }
+
+    const response = await fetch(`${basePath}/reports/${reportId}/resolve`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({follow_up_outcome: outcome.trim()}),
+    });
+
+    if (!response.ok) {
+        window.alert("Case could not be resolved right now.");
+        return;
+    }
+
+    applyPayload(await response.json());
+}
+
+function syncResidentSelect() {
+    const select = document.getElementById("resident-select");
+    const current = select.value;
+    const options = ['<option value="">Choose resident</option>'].concat(
+        (state.residents || []).map((resident) => `<option value="${resident.id}">${escapeHtml(resident.full_name)}</option>`)
+    );
+    select.innerHTML = options.join("");
+    if ((state.residents || []).some((resident) => String(resident.id) === current)) {
+        select.value = current;
+    }
+}
+
+function renderOperators() {
+    const operators = loadOperators();
+    const list = document.getElementById("operator-list");
+    if (!operators.length) {
+        list.innerHTML = '<div class="directory-card empty"><strong>No demo operators</strong><div class="empty-state">Add a presentation-only operator to show staffing definitions.</div></div>';
+        return;
+    }
+
+    list.innerHTML = operators.map((operator, index) => `
+        <div class="directory-card">
+            <strong>${escapeHtml(operator.name)}</strong>
+            <div>${escapeHtml(operator.role)} • ${escapeHtml(operator.shift)}</div>
+            <div class="metric-row" style="margin-top:10px;">
+                <span class="tiny-pill">Presentation-only</span>
+            </div>
+            <div style="margin-top:12px;">
+                <button class="inline-button" type="button" data-remove-operator="${index}">Remove</button>
+            </div>
+        </div>
+    `).join("");
+
+    list.querySelectorAll("[data-remove-operator]").forEach((button) => {
+        button.addEventListener("click", () => {
+            const next = loadOperators().filter((_, index) => index !== Number(button.dataset.removeOperator));
+            saveOperators(next);
+            renderOperators();
+        });
+    });
+}
+
+function renderAll() {
+    renderDemoHeader();
+    renderStats();
+    renderDevices();
+    renderAlerts();
+    renderFeed();
+    renderIncidentPreview();
+    renderResolvedCards();
+    renderResidents();
+    renderReports();
+    syncResidentSelect();
+    renderOperators();
+}
+
+function applyPayload(payload) {
+    state.residents = payload.residents || [];
+    state.reports = payload.reports || [];
+    state.stats = payload.stats || {};
+    state.demo = payload.demo || {};
+    renderAll();
+}
+
+async function fetchDashboard() {
+    const response = await fetch(`${basePath}/api/dashboard`);
+    if (!response.ok) {
+        return;
+    }
+    const payload = await response.json();
+    applyPayload(payload);
+}
+
+function stopPolling() {
+    if (pollTimer) {
+        window.clearInterval(pollTimer);
+        pollTimer = null;
+    }
+}
+
+function startPolling() {
+    stopPolling();
+    if (!state.demo.enabled) {
+        return;
+    }
+    fetchDashboard();
+    pollTimer = window.setInterval(fetchDashboard, state.demo.poll_interval_ms || 9000);
+}
+
+function setView(viewId) {
+    document.querySelectorAll(".nav-button").forEach((button) => {
+        button.classList.toggle("active", button.dataset.view === viewId);
+    });
+    document.querySelectorAll(".view").forEach((view) => {
+        view.classList.toggle("active", view.id === `view-${viewId}`);
+    });
+    window.localStorage.setItem("carelink_active_view", viewId);
+}
+
+function initializeNavigation() {
+    const saved = window.localStorage.getItem("carelink_active_view") || "dashboard";
+    setView(saved);
+    document.querySelectorAll(".nav-button").forEach((button) => {
+        button.addEventListener("click", () => setView(button.dataset.view));
+    });
+}
+
+document.getElementById("sidebar-toggle").addEventListener("click", () => {
+    document.getElementById("sidebar").classList.toggle("collapsed");
+});
+
+document.getElementById("demo-toggle").addEventListener("click", async () => {
+    const response = await fetch(`${basePath}/demo/toggle`, { method: "POST" });
+    if (!response.ok) {
+        return;
+    }
+    const payload = await response.json();
+    applyPayload(payload);
+    startPolling();
+});
+
+document.getElementById("operator-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const name = document.getElementById("operator-name").value.trim();
+    const role = document.getElementById("operator-role").value.trim();
+    const shift = document.getElementById("operator-shift").value.trim();
+    if (!name || !role || !shift) {
+        return;
+    }
+    const next = loadOperators();
+    next.unshift({ name, role, shift });
+    saveOperators(next);
+    renderOperators();
+    event.target.reset();
+});
+
+initializeNavigation();
+renderAll();
+startPolling();
+</script>
 </body>
 </html>

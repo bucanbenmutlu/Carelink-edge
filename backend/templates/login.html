@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CareLink Edge Access</title>
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.16), transparent 25%),
+        linear-gradient(180deg, #0f172a 0%, #111827 100%);
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    box-sizing: border-box;
+}
+.shell {
+    width: 100%;
+    max-width: 1080px;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 24px;
+}
+.panel,
+.form-shell {
+    background: rgba(15, 23, 42, 0.78);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 28px;
+    padding: 30px;
+    box-shadow: 0 30px 80px rgba(2, 6, 23, 0.36);
+    backdrop-filter: blur(16px);
+}
+.eyebrow {
+    display: inline-flex;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #bbf7d0;
+    background: rgba(34, 197, 94, 0.16);
+}
+h1 {
+    margin: 18px 0 14px;
+    font-size: 50px;
+    line-height: 1.02;
+}
+h2 {
+    margin-top: 0;
+    font-size: 28px;
+}
+p {
+    color: #94a3b8;
+    line-height: 1.65;
+}
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 24px;
+}
+.feature {
+    padding: 16px;
+    border-radius: 18px;
+    background: rgba(30, 41, 59, 0.72);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+}
+.feature strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #f8fafc;
+}
+label {
+    display: block;
+    margin: 16px 0 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #cbd5e1;
+}
+input, button {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 14px;
+    padding: 13px 14px;
+    font-size: 15px;
+}
+input {
+    border: 1px solid #334155;
+    background: #0f172a;
+    color: #f8fafc;
+}
+button {
+    margin-top: 18px;
+    border: none;
+    background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+.hint {
+    margin-top: 16px;
+    color: #94a3b8;
+    font-size: 13px;
+}
+.error {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(248, 113, 113, 0.28);
+    background: rgba(127, 29, 29, 0.3);
+    color: #fecaca;
+}
+@media (max-width: 920px) {
+    .shell {
+        grid-template-columns: 1fr;
+    }
+    h1 {
+        font-size: 38px;
+    }
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+    <div class="panel">
+        <div class="eyebrow">Secure Demo Access</div>
+        <h1>CareLink Edge operations demo</h1>
+        <p>This demo is structured like a live elderly care coordination workspace: connected room hardware, caregiver response flow, resolved intervention tracking, and exception monitoring in one place.</p>
+
+        <div class="grid">
+            <div class="feature">
+                <strong>Operational dashboard</strong>
+                Device health, alerts, resolved interventions, and incident flow stay visible together.
+            </div>
+            <div class="feature">
+                <strong>Connected edge devices</strong>
+                Bed sensors, wearable telemetry, and room call buttons stream realistic data.
+            </div>
+            <div class="feature">
+                <strong>Resident safety workflow</strong>
+                Exceptions create reports, staff follow-up closes cases, and solved counts grow visibly.
+            </div>
+            <div class="feature">
+                <strong>Protected presentation mode</strong>
+                Static login only, no user registration, no database-backed account changes.
+            </div>
+        </div>
+    </div>
+
+    <div class="form-shell">
+        <h2>Sign in</h2>
+        <p>Use an authorized demo account to open the protected workspace.</p>
+
+        <form method="POST" action="{{ url_for('login') }}">
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <label>Username</label>
+            <input name="username" autocomplete="username" required>
+
+            <label>Password</label>
+            <input type="password" name="password" autocomplete="current-password" required>
+
+            <button type="submit">Open Dashboard</button>
+
+            <div class="hint">Authorized access is limited to preconfigured demo credentials.</div>
+
+            {% if error %}
+            <div class="error">{{ error }}</div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+</body>
+</html>

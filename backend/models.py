@@ -125,6 +125,18 @@ def get_all_incident_reports():
             incident_reports.severity,
             incident_reports.case_status,
             incident_reports.description,
+            incident_reports.location,
+            incident_reports.pulse,
+            incident_reports.blood_pressure,
+            incident_reports.temperature,
+            incident_reports.oxygen_saturation,
+            incident_reports.respiration_rate,
+            incident_reports.medication_name,
+            incident_reports.medication_dosage,
+            incident_reports.medication_time,
+            incident_reports.medication_correctness,
+            incident_reports.witnesses,
+            incident_reports.follow_up_outcome,
             incident_reports.created_at
         FROM incident_reports
         JOIN residents ON residents.id = incident_reports.resident_id
@@ -141,6 +153,39 @@ def delete_incident_report(report_id):
     conn.commit()
     conn.close()
 
+
+def resolve_incident_report(report_id, follow_up_outcome="Resident stabilized after caregiver follow-up."):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        """
+        UPDATE incident_reports
+        SET case_status = 'Resolved',
+            follow_up_outcome = CASE
+                WHEN TRIM(COALESCE(follow_up_outcome, '')) = '' THEN ?
+                ELSE follow_up_outcome
+            END
+        WHERE id = ?
+        """,
+        (follow_up_outcome, report_id),
+    )
+    conn.commit()
+    conn.close()
+
+
+def clear_demo_incident_reports():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        """
+        DELETE FROM incident_reports
+        WHERE staff_involved_signature = 'Demo Engine'
+           OR witnesses = 'Auto-generated CareLink demo event'
+        """
+    )
+    conn.commit()
+    conn.close()
+
 def get_counts():
     conn = get_connection()
     cur = conn.cursor()
@@ -148,7 +193,14 @@ def get_counts():
     residents = cur.fetchone()[0]
     cur.execute("SELECT COUNT(*) FROM incident_reports")
     reports = cur.fetchone()[0]
+    cur.execute("SELECT COUNT(*) FROM incident_reports WHERE case_status='Resolved'")
+    resolved = cur.fetchone()[0]
     cur.execute("SELECT COUNT(*) FROM incident_reports WHERE severity IN ('Severe','Fatal') OR case_status='Ongoing'")
     critical = cur.fetchone()[0]
     conn.close()
-    return {"residents": residents, "reports": reports, "critical": critical}
+    return {
+        "residents": residents,
+        "reports": reports,
+        "resolved": resolved,
+        "critical": critical,
+    }
